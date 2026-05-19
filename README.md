@@ -13,3 +13,9 @@ Les données (prospects, messages, clé) restent dans le **localStorage** de vot
 ## Fichiers
 
 - `agent-cash.html` — interface complète (styles + logique).
+
+## Passer au mode « agent 24/7 » (Make + Telegram + Sheets)
+
+Si tu veux quitter le stockage local pour un orchestrateur cloud, suis le plan détaillé (modules, colonnes Sheets, appels OpenRouter, branches Telegram) :
+
+- **[`docs/blueprint-make-agent-cash.md`](docs/blueprint-make-agent-cash.md)** — blueprint Make.com sans secrets à coller dans le repo.
