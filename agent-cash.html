@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Agent Cash Ultra • Prospection + Paiement</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { background: #0a0a0f; color: #e8e4dc; font-family: system-ui, sans-serif; padding: 16px; }
+    .container { max-width: 640px; margin: 0 auto; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    h1 span { color: #c8f03c; }
+    .badge { background: #c8f03c; color: #0a0a0f; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
+    .card { background: #111118; border: 1px solid rgba(200,240,60,0.2); border-radius: 20px; padding: 16px; margin-bottom: 20px; }
+    input, textarea { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; margin-bottom: 10px; font-size: 15px; }
+    label { display: block; color: #c8f03c; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .btn { background: #c8f03c; color: #0a0a0f; border: none; padding: 12px 20px; border-radius: 9999px; font-weight: bold; font-size: 15px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; }
+    .btn-secondary { background: #2a2a35; color: white; }
+    .btn-small { padding: 6px 12px; font-size: 13px; width: auto; }
+    .flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .prospect-item { background: #1a1a24; padding: 14px; border-radius: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .prospect-item.selected { border: 2px solid #c8f03c; background: #1e2a1a; }
+    .message-box { background: #0a0a0f; border-left: 4px solid #c8f03c; padding: 14px; border-radius: 12px; margin: 12px 0; white-space: pre-wrap; }
+    .toast { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #c8f03c; color: #0a0a0f; padding: 14px; border-radius: 9999px; text-align: center; font-weight: bold; z-index: 1000; }
+    .hidden { display: none; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    hr { margin: 12px 0; border-color: #2a2a35; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Agent <span>Cash</span> <span class="badge">Ultra · Vente directe</span></h1>
+
+  <!-- Configuration personnelle (RIB + offre) -->
+  <div class="card">
+    <label>💼 Ton offre (produit/service)</label>
+    <input type="text" id="offreNom" placeholder="Ex: Audit SEO complet" value="Pack Croissance Express">
+    <label>💰 Prix (€)</label>
+    <input type="number" id="prix" placeholder="1999" value="1999">
+    <label>🏦 Ton RIB ou lien de paiement (Stripe, Paypal, etc.)</label>
+    <textarea id="rib" rows="2" placeholder="FR76 1234 5678... ou lien https://pay..."></textarea>
+    <div class="flex" style="justify-content: space-between; margin-top: 6px;">
+      <button id="saveConfigBtn" class="btn-secondary btn-small">💾 Sauvegarder infos</button>
+      <span id="configStatus" style="font-size:12px; color:#c8f03c;"></span>
+    </div>
+  </div>
+
+  <!-- Clé API OpenRouter -->
+  <div class="card">
+    <label>🔑 Clé OpenRouter (gratuite sur openrouter.ai/keys)</label>
+    <input type="password" id="apiKey" placeholder="sk-or-v1-...">
+    <button id="saveKey" class="btn-secondary btn-small">Sauvegarder clé</button>
+    <div id="apiStatus" style="margin-top:8px; font-size:13px;"></div>
+  </div>
+
+  <!-- Trouver des clients par niche -->
+  <div class="card">
+    <label>🔍 Trouver des clients chauds (niche)</label>
+    <input id="niche" placeholder="Ex: SaaS B2B, coach sportif, agence marketing...">
+    <button id="findBtn" class="btn">🔎 Générer des prospects</button>
+    <div id="suggestedList"></div>
+  </div>
+
+  <!-- Ajout manuel -->
+  <div class="card">
+    <label>➕ Ajouter un prospect manuellement</label>
+    <div class="grid-2">
+      <input id="name" placeholder="Nom">
+      <input id="company" placeholder="Entreprise">
+    </div>
+    <input id="need" placeholder="Besoin / problème">
+    <button id="addBtn" class="btn">Ajouter</button>
+  </div>
+
+  <!-- Liste prospects & campagne -->
+  <div class="card">
+    <div class="flex" style="justify-content: space-between;">
+      <label>📋 Prospects (<span id="count">0</span>)</label>
+      <button id="deselectBtn" class="btn-secondary btn-small">Tout désélectionner</button>
+    </div>
+    <div id="prospectList"></div>
+    <button id="launchBtn" class="btn">⚡ Générer messages avec offre & RIB</button>
+  </div>
+
+  <!-- Messages générés -->
+  <div id="genArea" class="card hidden">
+    <label>✉️ Messages prêts à envoyer (copier/coller)</label>
+    <div id="messagesContainer"></div>
+  </div>
+
+  <!-- Mémoire de l'agent -->
+  <div class="card">
+    <label>🧠 Feedbacks (<span id="fbCount">0</span>) — apprentissage</label>
+    <button id="clearFb" class="btn-secondary btn-small">Effacer mémoire</button>
+    <div id="feedbackList" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<script>
+  // ========== ÉTAT ==========
+  let prospects = [];
+  let feedbacks = [];
+  let messages = {};          // { id: { linkedin, email } }
+  let selected = new Set();
+  let apiKey = localStorage.getItem('apiKey') || '';
+  let config = {
+    offreNom: localStorage.getItem('offreNom') || 'Pack Croissance Express',
+    prix: localStorage.getItem('prix') || '1999',
+    rib: localStorage.getItem('rib') || 'Mon RIB : FR76 1234 5678 0000 1234 5678 123'
+  };
+
+  function newProspectId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  }
+
+  function stripJsonFence(text) {
+    const t = String(text || '').trim();
+    const m = t.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+    return m ? m[1].trim() : t;
+  }
+
+  // ========== PERSISTANCE ==========
+  function saveAll() {
+    localStorage.setItem('prospects', JSON.stringify(prospects));
+    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+    localStorage.setItem('messages', JSON.stringify(messages));
+    localStorage.setItem('selected', JSON.stringify([...selected]));
+    localStorage.setItem('offreNom', config.offreNom);
+    localStorage.setItem('prix', config.prix);
+    localStorage.setItem('rib', config.rib);
+  }
+
+  function loadAll() {
+    prospects = JSON.parse(localStorage.getItem('prospects') || '[]').map(p => ({
+      ...p,
+      id: String(p.id != null ? p.id : newProspectId())
+    }));
+    feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+    messages = JSON.parse(localStorage.getItem('messages') || '{}');
+    const rawSel = JSON.parse(localStorage.getItem('selected') || '[]');
+    selected = new Set(rawSel.map(String));
+    document.getElementById('offreNom').value = config.offreNom;
+    document.getElementById('prix').value = config.prix;
+    document.getElementById('rib').value = config.rib;
+    if (apiKey) document.getElementById('apiKey').value = apiKey;
+    updateUI();
+    renderProspects();
+    renderFeedbacks();
+    if (Object.keys(messages).length) document.getElementById('genArea').classList.remove('hidden');
+    renderMessages();
+  }
+
+  function updateUI() {
+    document.getElementById('count').textContent = prospects.length;
+    document.getElementById('fbCount').textContent = feedbacks.length;
+    document.getElementById('apiStatus').innerHTML = apiKey ? '✅ Clé OK' : '⚠️ Clé API requise';
+    document.getElementById('configStatus').innerHTML = '✅ Offre & RIB sauvegardés';
+  }
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2200);
+  }
+
+  function escape(str) { return String(str).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[m]); }
+
+  // ========== RECHERCHE DE PROSPECTS PAR IA ==========
+  async function findProspects() {
+    const niche = document.getElementById('niche').value.trim();
+    if (!niche) return showToast("Entrez une niche");
+    if (!apiKey) return showToast("Clé API manquante");
+
+    const prompt = `Génère 5 prospects très qualifiés pour la niche : "${niche}".
+Chaque prospect doit avoir un nom, une entreprise, et un besoin spécifique (une phrase qui montre un problème payant).
+Réponds UNIQUEMENT en JSON : [{"nom":"...", "entreprise":"...", "besoin":"..."}]`;
+
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+        body: JSON.stringify({
+          model: "anthropic/claude-3-haiku",
+          messages: [{ role: "user", content: prompt }],
+          max_tokens: 800,
+          temperature: 0.8
+        })
+      });
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content || "[]";
+      let results = [];
+      try { results = JSON.parse(stripJsonFence(text)); } catch(e) { results = []; }
+      renderSuggested(results);
+    } catch(e) { showToast("Erreur réseau"); }
+  }
+
+  function renderSuggested(suggested) {
+    const div = document.getElementById('suggestedList');
+    if (!suggested.length) { div.innerHTML = "<p>Aucun résultat.</p>"; return; }
+    let html = '<strong>Prospects trouvés :</strong>';
+    suggested.forEach((p, i) => {
+      html += `<div class="suggested" style="background:#1a1a24; border-radius:12px; padding:10px; margin-top:8px;">
+        <div><strong>${escape(p.nom || '?')}</strong> — ${escape(p.entreprise || '?')}<br><small>${escape(p.besoin || '')}</small></div>
+        <button class="btn-secondary btn-small add-suggested" data-index="${i}">+ Ajouter</button>
+      </div>`;
+    });
+    div.innerHTML = html;
+    document.querySelectorAll('.add-suggested').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.index, 10);
+        const s = suggested[idx];
+        prospects.unshift({ id: newProspectId(), nom: s.nom, entreprise: s.entreprise, besoin: s.besoin });
+        saveAll();
+        renderProspects();
+        updateUI();
+        showToast("Prospect ajouté");
+      });
+    });
+  }
+
+  // ========== CRUD PROSPECTS ==========
+  function addManualProspect() {
+    const nom = document.getElementById('name').value.trim();
+    const entreprise = document.getElementById('company').value.trim();
+    const besoin = document.getElementById('need').value.trim();
+    if (!nom || !entreprise || !besoin) return showToast("Tous les champs requis");
+    prospects.push({ id: newProspectId(), nom, entreprise, besoin });
+    saveAll();
+    renderProspects();
+    updateUI();
+    document.getElementById('name').value = '';
+    document.getElementById('company').value = '';
+    document.getElementById('need').value = '';
+    showToast("Prospect ajouté");
+  }
+
+  function renderProspects() {
+    const div = document.getElementById('prospectList');
+    if (!prospects.length) { div.innerHTML = '<div style="padding:30px;text-align:center;color:#555;">Aucun prospect</div>'; return; }
+    let html = '';
+    prospects.forEach(p => {
+      const sid = escape(String(p.id));
+      const sel = selected.has(String(p.id)) ? 'selected' : '';
+      html += `<div class="prospect-item ${sel}" data-id="${sid}">
+        <div><strong>${escape(p.nom)}</strong><br><span style="color:#c8f03c;">${escape(p.entreprise)}</span><br><small>${escape(p.besoin)}</small></div>
+        <button class="delete-prospect" data-id="${sid}" style="background:none; border:none; font-size:22px;">🗑️</button>
+      </div>`;
+    });
+    div.innerHTML = html;
+    // Sélection
+    div.querySelectorAll('.prospect-item').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-prospect')) return;
+        const id = el.dataset.id;
+        selected.has(id) ? selected.delete(id) : selected.add(id);
+        saveAll();
+        renderProspects();
+      });
+    });
+    // Suppression
+    div.querySelectorAll('.delete-prospect').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        prospects = prospects.filter(p => String(p.id) !== id);
+        selected.delete(id);
+        delete messages[id];
+        saveAll();
+        renderProspects();
+        renderMessages();
+        updateUI();
+      });
+    });
+  }
+
+  // ========== GÉNÉRATION AVEC OFFRE + RIB ==========
+  async function generateForProspect(prospect) {
+    if (!apiKey) { showToast("Clé API manquante"); return null; }
+    const pid = String(prospect.id);
+    const recentFeedbacks = feedbacks.slice(-8);
+    let fbText = "";
+    if (recentFeedbacks.length) {
+      fbText = "\n\nFeedbacks précédents (à intégrer) :\n" + recentFeedbacks.map(f => `- Ancien: "${f.ancien}" → Correction: "${f.correction}"`).join("\n");
+    }
+    const offre = config.offreNom;
+    const prix = config.prix;
+    const rib = config.rib;
+    const prompt = `Tu es un commercial expert en closing. Prospect : ${prospect.nom} (${prospect.entreprise}), besoin : ${prospect.besoin}.
+Notre offre : ${offre} à ${prix}€.
+Mode de paiement : ${rib}.
+
+Génère :
+1. Un message LinkedIn court (2-4 phrases) très percutant, personnalisé, qui mentionne l'offre et une action claire (ex: "réservez votre audit").
+2. Un email (sujet + corps) qui détaille la valeur, inclut le prix et le RIB/paiement pour facturation immédiate.
+
+Style : professionnel, amical, urgent mais non agressif.
+${fbText}
+Réponds UNIQUEMENT en JSON avec les clés "linkedin" et "email".`;
+
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+        body: JSON.stringify({
+          model: "anthropic/claude-3-haiku",
+          messages: [{ role: "user", content: prompt }],
+          max_tokens: 800,
+          temperature: 0.75
+        })
+      });
+      const data = await res.json();
+      const content = data.choices?.[0]?.message?.content || "{}";
+      let parsed = {};
+      try { parsed = JSON.parse(stripJsonFence(content)); } catch(e) { parsed = { linkedin: content, email: "" }; }
+      const linkedinMsg = (parsed.linkedin || "Message LinkedIn non généré") + `\n\n💰 Offre spéciale : ${offre} à ${prix}€. Paiement sécurisé : ${rib}`;
+      const emailMsg = parsed.email || `Sujet: Votre solution ${offre}\n\nBonjour ${prospect.nom}, ...\nPrix: ${prix}€. RIB: ${rib}`;
+      messages[pid] = { linkedin: linkedinMsg, email: emailMsg };
+      saveAll();
+      return messages[pid];
+    } catch(e) { showToast("Erreur génération"); return null; }
+  }
+
+  async function launch() {
+    const targets = selected.size ? prospects.filter(p => selected.has(String(p.id))) : prospects;
+    if (!targets.length) return showToast(!prospects.length ? "Ajoutez des prospects" : "Aucun prospect dans la sélection");
+    if (!apiKey) return showToast("Clé API manquante");
+    // Mettre à jour la config depuis les champs
+    config.offreNom = document.getElementById('offreNom').value.trim() || config.offreNom;
+    config.prix = document.getElementById('prix').value.trim() || config.prix;
+    config.rib = document.getElementById('rib').value.trim() || config.rib;
+    saveAll();
+    document.getElementById('genArea').classList.remove('hidden');
+    for (let p of targets) {
+      const pid = String(p.id);
+      if (!messages[pid]) {
+        await generateForProspect(p);
+        renderMessages();
+        await new Promise(r => setTimeout(r, 500));
+      }
+    }
+    renderMessages();
+  }
+
+  function corrFieldId(prospectId) {
+    return 'corr-' + String(prospectId).replace(/[^a-zA-Z0-9_-]/g, '_');
+  }
+
+  function renderMessages() {
+    const targets = selected.size ? prospects.filter(p => selected.has(String(p.id))) : prospects;
+    const container = document.getElementById('messagesContainer');
+    if (!targets.length) { container.innerHTML = '<div style="padding:20px;text-align:center;">Aucun prospect sélectionné</div>'; return; }
+    let html = '';
+    for (let p of targets) {
+      const pid = String(p.id);
+      const msg = messages[pid];
+      const cid = corrFieldId(pid);
+      html += `<div style="margin-bottom:28px; border-bottom:1px solid #2a2a35; padding-bottom:16px;">
+        <strong>${escape(p.nom)}</strong> — ${escape(p.entreprise)}<br>
+        <small>${escape(p.besoin)}</small>`;
+      if (msg) {
+        if (msg.linkedin) html += `<div class="message-box"><strong>🔗 LinkedIn</strong><br>${escape(msg.linkedin)}<br><button type="button" class="btn-small btn-secondary copy-btn" data-text="${encodeURIComponent(msg.linkedin)}">📋 Copier</button></div>`;
+        if (msg.email) html += `<div class="message-box"><strong>✉️ Email</strong><br>${escape(msg.email)}<br><button type="button" class="btn-small btn-secondary copy-btn" data-text="${encodeURIComponent(msg.email)}">📋 Copier</button></div>`;
+        html += `<div class="flex"><textarea id="${escape(cid)}" rows="2" placeholder="Correction (meilleure version)..." style="flex:1;"></textarea><button type="button" class="btn-small btn-secondary send-correction" data-id="${escape(pid)}">📘 Envoyer correction</button></div>`;
+      } else {
+        html += `<div class="status">⏳ En attente de génération</div>`;
+      }
+      html += `</div>`;
+    }
+    container.innerHTML = html;
+    // Copie
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const raw = btn.getAttribute('data-text');
+        const text = raw ? decodeURIComponent(raw) : '';
+        navigator.clipboard.writeText(text);
+        showToast("Message copié ! Envoyez-le maintenant.");
+      });
+    });
+    // Correction + apprentissage
+    document.querySelectorAll('.send-correction').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const textarea = document.getElementById(corrFieldId(id));
+        const correction = textarea && textarea.value.trim();
+        if (!correction) return;
+        const prospect = prospects.find(p => String(p.id) === String(id));
+        if (!prospect) return;
+        const ancienMsg = messages[id]?.linkedin || messages[id]?.email || "";
+        if (ancienMsg) {
+          feedbacks.push({ id: Date.now(), ancien: ancienMsg, correction, date: new Date().toISOString() });
+          if (feedbacks.length > 40) feedbacks.shift();
+          saveAll();
+          renderFeedbacks();
+          updateUI();
+          textarea.value = "";
+          showToast("Correction enregistrée – l'agent s'améliore !");
+          await generateForProspect(prospect);
+          renderMessages();
+        }
+      });
+    });
+  }
+
+  function renderFeedbacks() {
+    const div = document.getElementById('feedbackList');
+    if (!feedbacks.length) { div.innerHTML = '<div style="color:#aaa;">Aucun feedback. Corrigez des messages pour améliorer l’IA.</div>'; return; }
+    let html = '';
+    [...feedbacks].reverse().slice(0, 12).forEach((fb, i) => {
+      const preview = fb.ancien.length > 80 ? escape(fb.ancien.substring(0, 80)) + '…' : escape(fb.ancien);
+      html += `<div style="background:#1a1a24; border-radius:12px; padding:10px; margin-bottom:8px;">
+        <div style="font-size:11px; color:#c8f03c;">#${feedbacks.length - i}</div>
+        <div style="font-size:12px; color:#ff8888;">❌ Ancien: ${preview}</div>
+        <div style="font-size:12px; color:#c8f03c;">✅ Correction: ${escape(fb.correction)}</div>
+      </div>`;
+    });
+    div.innerHTML = html;
+  }
+
+  function clearFeedbacks() { feedbacks = []; saveAll(); renderFeedbacks(); updateUI(); showToast("Mémoire effacée"); }
+  function deselectAll() { selected.clear(); saveAll(); renderProspects(); }
+
+  // ========== EVENTS & INIT ==========
+  document.getElementById('saveKey').addEventListener('click', () => {
+    apiKey = document.getElementById('apiKey').value.trim();
+    if (apiKey) localStorage.setItem('apiKey', apiKey);
+    updateUI();
+    showToast("Clé sauvegardée");
+  });
+  document.getElementById('saveConfigBtn').addEventListener('click', () => {
+    config.offreNom = document.getElementById('offreNom').value.trim();
+    config.prix = document.getElementById('prix').value.trim();
+    config.rib = document.getElementById('rib').value.trim();
+    saveAll();
+    showToast("Offre & RIB sauvegardés");
+    updateUI();
+  });
+  document.getElementById('findBtn').addEventListener('click', findProspects);
+  document.getElementById('addBtn').addEventListener('click', addManualProspect);
+  document.getElementById('launchBtn').addEventListener('click', launch);
+  document.getElementById('clearFb').addEventListener('click', clearFeedbacks);
+  document.getElementById('deselectBtn').addEventListener('click', deselectAll);
+
+  loadAll();
+</script>
+</body>
+</html>
