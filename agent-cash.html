@@ -716,7 +716,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
         urgence: parsed.urgence,
         action_principale: parsed.action_principale,
         conseils: parsed.conseils,
-        snippet: (input || url || (hasImg ? 'photo' : '')).slice(0, 200)
+        snippet: (input || url || (hasImg ? 'photo' : '')).slice(0, 2000)
       });
       saveHistory();
       renderHistory();
