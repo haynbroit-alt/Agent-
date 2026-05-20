@@ -15,16 +15,70 @@
     .badge { background: #7dd3fc; color: #0a0a0f; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
     .sub { color: #94a3b8; font-size: 14px; margin-bottom: 16px; line-height: 1.45; }
     .card { background: #111118; border: 1px solid rgba(125,211,252,0.25); border-radius: 20px; padding: 16px; margin-bottom: 16px; }
-    input, textarea, select { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; margin-bottom: 10px; font-size: 16px; }
+    input, textarea, select { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; color: white; margin-bottom: 10px; font-size: 16px; box-sizing: border-box; }
+    /* Zones tactiles (cible ~48px) — .btn / .btn-small affinent en dessous */
+    button, input:not([type="hidden"]), textarea, select, .clickable, [role="button"] {
+      min-width: 48px;
+      min-height: 48px;
+      padding: 12px 16px;
+      box-sizing: border-box;
+    }
     label { display: block; color: #7dd3fc; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .btn { background: #7dd3fc; color: #0a0a0f; border: none; padding: 14px 20px; border-radius: 9999px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; touch-action: manipulation; min-height: 48px; }
+    .btn { background: #7dd3fc; color: #0a0a0f; border: none; padding: 14px 20px; border-radius: 9999px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; touch-action: manipulation; min-height: 48px; min-width: 48px; }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn-secondary { background: #2a2a35; color: white; }
-    .btn-small { padding: 8px 14px; font-size: 13px; width: auto; min-height: 40px; }
+    .btn-small { padding: 10px 16px; font-size: 13px; width: auto; min-height: 48px; min-width: 48px; }
     .flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .toast { position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 16px; right: 16px; background: #7dd3fc; color: #0a0a0f; padding: 14px; border-radius: 9999px; text-align: center; font-weight: bold; z-index: 1000; box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
-    .toast.err { background: #fecaca; color: #450a0a; }
+    /* Toast centré, safe-area iPhone, animation */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(20px, env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%) translateY(120px);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      max-width: min(560px, 90vw);
+      min-height: 48px;
+      min-width: min(100%, 280px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 9999;
+      pointer-events: none;
+      background: #7dd3fc;
+      color: #0a0a0f;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    .toast.error {
+      background: #ff4444;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+    }
+    .toast.success {
+      background: #28a745;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+    }
+    .toast.warning {
+      background: #ffc107;
+      color: #1a1a1a;
+      box-shadow: 0 4px 12px rgba(255, 193, 7, 0.35);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toast { transition: opacity 0.2s ease; transform: translateX(-50%) translateY(12px) !important; }
+      .toast.show { transform: translateX(-50%) translateY(0) !important; }
+    }
     .hidden { display: none !important; }
     .message-box { background: #0a0a0f; padding: 14px; border-radius: 12px; margin-top: 12px; white-space: pre-wrap; word-break: break-word; }
     .message-box.vert { border-left: 4px solid #22c55e; }
@@ -37,16 +91,18 @@
     .thumb { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid #333; max-height: 280px; object-fit: contain; background: #000; }
     .hint { font-size: 12px; color: #64748b; margin-top: -4px; margin-bottom: 10px; line-height: 1.45; }
     .hist-item { background: #1a1a24; border-radius: 12px; padding: 12px; margin-bottom: 8px; font-size: 13px; cursor: pointer; border: 1px solid transparent; }
+    .hist-item.clickable { min-height: 48px; }
     .hist-item:hover, .hist-item:focus-visible { border-color: rgba(125,211,252,0.45); }
     .hist-item strong { color: #7dd3fc; }
     input[type="file"] { padding: 10px; }
     .row-actions .btn-secondary { flex: 1; min-width: 100px; }
     details.card { padding: 12px 16px; }
-    details.card > summary { cursor: pointer; font-weight: 700; color: #7dd3fc; list-style: none; }
+    details.card > summary { cursor: pointer; font-weight: 700; color: #7dd3fc; list-style: none; min-height: 48px; display: flex; align-items: center; }
     details.card > summary::-webkit-details-marker { display: none; }
     .kbd { font-size: 11px; background: #1a1a24; padding: 2px 6px; border-radius: 6px; border: 1px solid #333; }
     a { color: #7dd3fc; }
-    *:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
+    *:focus-visible { outline: 3px solid #007bff; outline-offset: 2px; border-radius: 6px; }
+    details.card > summary:focus-visible { border-radius: 8px; }
     @media (prefers-reduced-motion: reduce) {
       * { scroll-behavior: auto !important; }
     }
@@ -133,7 +189,7 @@
       <button type="button" id="clearHistory" class="btn-secondary btn-small">Tout effacer</button>
     </div>
     <p class="hint">Stockage local uniquement. Touche une ligne pour recharger le texte.</p>
-    <div id="historyList" role="list"></div>
+    <div id="historyList" role="group" aria-label="Historique des analyses"></div>
   </section>
 </div>
 
@@ -204,13 +260,27 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]);
   }
 
-  function showToast(msg, isError) {
+  function showToast(msg, kind) {
+    let variant = 'info';
+    if (kind === true || kind === 'error') variant = 'error';
+    else if (kind === 'success') variant = 'success';
+    else if (kind === 'warning') variant = 'warning';
+
     const t = document.createElement('div');
-    t.className = 'toast' + (isError ? ' err' : '');
+    t.className = 'toast';
+    if (variant !== 'info') t.classList.add(variant);
     t.setAttribute('role', 'status');
+    t.setAttribute('aria-live', variant === 'error' ? 'assertive' : 'polite');
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), isError ? 4200 : 2600);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => t.classList.add('show'));
+    });
+    const duration = variant === 'error' ? 4200 : variant === 'warning' ? 3400 : 2800;
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 320);
+    }, duration);
   }
 
   function updateApiStatus() {
@@ -264,8 +334,8 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     [...history].reverse().slice(0, 20).forEach((h, idx) => {
       const realIdx = history.length - 1 - idx;
       const row = document.createElement('div');
-      row.className = 'hist-item';
-      row.setAttribute('role', 'listitem');
+      row.className = 'hist-item clickable';
+      row.setAttribute('role', 'button');
       row.tabIndex = 0;
       const when = h.date ? new Date(h.date).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }) : '';
       row.innerHTML = `<strong>${escapeHtml(h.urgence || '?')}</strong> · ${escapeHtml(h.action_principale || '')}<br><span class="hint">${escapeHtml(when)}</span>`;
@@ -274,7 +344,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
         const snippet = h.snippet || h.action_principale || '';
         ta.value = snippet.slice(0, MAX_SITUATION_CHARS);
         ta.focus();
-        showToast('Texte rechargé depuis l’historique');
+        showToast('Texte rechargé depuis l’historique', 'success');
       };
       row.addEventListener('click', restore);
       row.addEventListener('keydown', (ev) => {
@@ -503,7 +573,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     stream.getTracks().forEach(t => t.stop());
     currentImageDataUrl = await downscaleDataUrl(canvas.toDataURL('image/jpeg', 0.85), MAX_IMAGE_EDGE);
     showPhotoPreview();
-    showToast('Photo capturée');
+    showToast('Photo capturée', 'success');
   }
 
   function showPhotoPreview() {
@@ -605,7 +675,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       const ta = document.getElementById('situationInput');
       const prefix = ta.value.trim() ? ta.value.trim() + '\n\n' : '';
       ta.value = (prefix + '[Transcription audio] ' + text).slice(0, MAX_SITUATION_CHARS);
-      showToast('Audio transcrit');
+      showToast('Audio transcrit', 'success');
     } catch (e) {
       console.warn(e);
       showToast(e.message || 'Transcription impossible (essaie la dictée ou décris le son).', true);
@@ -635,7 +705,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       const ta = document.getElementById('situationInput');
       ta.value = ((ta.value.trim() ? ta.value.trim() + '\n\n' : '') + t).slice(0, MAX_SITUATION_CHARS);
       status.textContent = 'Dictée terminée.';
-      showToast('Texte ajouté');
+      showToast('Texte ajouté', 'success');
     };
     rec.onerror = (ev) => {
       status.textContent = 'Erreur dictée : ' + (ev.error || 'inconnue');
@@ -693,7 +763,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       try {
         showToast('Enrichissement Firecrawl…');
         enriched = await enrichWithFirecrawl(url);
-        if (!enriched) showToast('Enrichissement vide (URL ou clé)', true);
+        if (!enriched) showToast('Enrichissement vide (URL ou clé)', 'warning');
       } catch (e) {
         console.warn(e);
         showToast('Firecrawl : ' + (e.message || 'indisponible'), true);
@@ -782,7 +852,8 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     apiKey = document.getElementById('apiKey').value.trim();
     if (apiKey) localStorage.setItem('apiKey', apiKey);
     updateApiStatus();
-    showToast(apiKey ? 'Clé OpenRouter sauvegardée' : 'Clé effacée du champ (non enregistrée)');
+    if (apiKey) showToast('Clé OpenRouter sauvegardée', 'success');
+    else showToast('Clé effacée du champ (non enregistrée)', 'warning');
   });
 
   document.getElementById('clearKey').addEventListener('click', () => {
@@ -790,7 +861,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     localStorage.removeItem('apiKey');
     document.getElementById('apiKey').value = '';
     updateApiStatus();
-    showToast('Clé OpenRouter retirée du navigateur');
+    showToast('Clé OpenRouter retirée du navigateur', 'success');
   });
 
   document.getElementById('modelSelect').addEventListener('change', () => {
@@ -803,7 +874,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     localStorage.setItem('firecrawlKey', firecrawlKey);
     localStorage.setItem('firecrawlBase', firecrawlBase);
     localStorage.setItem('enrichToggle', document.getElementById('enrichToggle').checked ? '1' : '0');
-    showToast('Paramètres Firecrawl sauvegardés');
+    showToast('Paramètres Firecrawl sauvegardés', 'success');
   });
 
   document.getElementById('enrichToggle').addEventListener('change', () => {
@@ -814,7 +885,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     if (!lastResultText) return;
     try {
       await navigator.clipboard.writeText(lastResultText);
-      showToast('Copié');
+      showToast('Copié', 'success');
     } catch {
       showToast('Copie impossible (permissions navigateur)', true);
     }
@@ -826,7 +897,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     history = [];
     saveHistory();
     renderHistory();
-    showToast('Historique effacé');
+    showToast('Historique effacé', 'success');
   });
 
   loadAll();
