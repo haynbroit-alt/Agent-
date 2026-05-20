@@ -1,6 +1,6 @@
 # Blueprint Make.com — Agent autonome (Telegram + Sheets + OpenRouter)
 
-Ce document prolonge **Agent Cash Ultra** (`agent-cash.html`) : même logique métier (prospects, génération, corrections), mais avec **Make.com** comme orchestrateur, **Google Sheets** comme base, et **Telegram** comme interface mobile. Aucune clé API ne doit figurer dans ce dépôt ni dans les scénarios exportés en clair : utilise les **connexions** et **variables** Make.
+Ce document décrit un **agent autonome** (Make.com + Telegram + Google Sheets + OpenRouter). Le fichier **`agent-cash.html`** dans ce dépôt a été réorienté vers l’**interprétation situationnelle** (texte, URL, photo, audio/dictée) : le même empilement cloud ci-dessous reste valable en remplaçant le prompt « prospection » par le **prompt d’interprétation** (voir section 9). Aucune clé API ne doit figurer dans ce dépôt ni dans les scénarios exportés en clair : utilise les **connexions** et **variables** Make.
 
 ---
 
@@ -151,10 +151,28 @@ Les exports Make sont **liés au compte**, aux connexions OAuth et aux versions 
 
 ---
 
+## 9. Variante « Interprète instant » (Telegram + Make + OpenRouter)
+
+Adapte le **Scénario A** (Telegram) pour un usage **situationnel** plutôt que prospection :
+
+1. **Déclencheur** : message Telegram texte, **photo** ou **voice** (fichier).  
+2. **Router** :  
+   - texte → corps du prompt utilisateur ;  
+   - photo → récupérer `file_id`, télécharger le fichier via l’API Telegram, convertir en base64 ou URL temporaire accessible par ton worker, puis appeler OpenRouter avec un **modèle vision** ;  
+   - voice → télécharger l’`.ogg` / `.m4a`, appeler **`/v1/audio/transcriptions`** OpenRouter (Whisper) puis passer le texte transcrit au prompt.  
+3. **Prompt système** : reprendre les mêmes **garde-fous** que dans `agent-cash.html` (pas d’illégalité, pas de posologie, orientation secours 112, pas de décisions financières à la place de l’utilisateur).  
+4. **Sortie** : idéalement JSON structuré `{ urgence, action_principale, conseils[], rappel_secours }` puis reformater en message lisible pour Telegram.  
+5. **Sheets** (optionnel) : feuille `Situations` avec colonnes `Date | UserId | Texte | Urgence | JSON brut | Photo_url` pour audit et amélioration continue.  
+6. **Firecrawl** : à réserver aux cas « URL à résumer » ; exécute le scrape **côté serveur** (Make / n8n / Cloud Function), pas depuis le navigateur mobile seul (CORS, quotas).
+
+Un squelette **Python** (polling) minimal vit dans `telegram_interpret_bot/` : clés uniquement en variables d’environnement.
+
+---
+
 ## Liens utiles
 
 - [OpenRouter — clés API](https://openrouter.ai/keys)  
 - [Documentation API chat completions OpenRouter](https://openrouter.ai/docs/api-reference/chat-completion)  
 - Make : connexions **HTTP**, **Google Sheets**, **Telegram**
 
-Pour revenir à la version locale sans orchestrateur : voir `agent-cash.html` et le `README.md` à la racine.
+Pour la version locale sans orchestrateur : voir **`agent-cash.html`** (interprétation situationnelle) et le **`README.md`** à la racine. Pour un bot serveur minimal : dossier **`telegram_interpret_bot/`**.

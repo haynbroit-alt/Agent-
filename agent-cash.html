@@ -3,115 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Agent Cash Ultra • Prospection + Paiement</title>
+  <title>Interprète Instant • Analyse situationnelle</title>
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body { background: #0a0a0f; color: #e8e4dc; font-family: system-ui, sans-serif; padding: 16px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0f; color: #e8e4dc; font-family: system-ui, sans-serif; padding: 16px; padding-bottom: 96px; }
     .container { max-width: 640px; margin: 0 auto; }
-    h1 { font-size: 28px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-    h1 span { color: #c8f03c; }
-    .badge { background: #c8f03c; color: #0a0a0f; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
-    .card { background: #111118; border: 1px solid rgba(200,240,60,0.2); border-radius: 20px; padding: 16px; margin-bottom: 20px; }
-    input, textarea { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; margin-bottom: 10px; font-size: 15px; }
-    label { display: block; color: #c8f03c; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .btn { background: #c8f03c; color: #0a0a0f; border: none; padding: 12px 20px; border-radius: 9999px; font-weight: bold; font-size: 15px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    h1 span { color: #7dd3fc; }
+    .badge { background: #7dd3fc; color: #0a0a0f; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
+    .sub { color: #94a3b8; font-size: 14px; margin-bottom: 16px; line-height: 1.45; }
+    .card { background: #111118; border: 1px solid rgba(125,211,252,0.25); border-radius: 20px; padding: 16px; margin-bottom: 16px; }
+    input, textarea, select { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; margin-bottom: 10px; font-size: 15px; }
+    label { display: block; color: #7dd3fc; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .btn { background: #7dd3fc; color: #0a0a0f; border: none; padding: 12px 20px; border-radius: 9999px; font-weight: bold; font-size: 15px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; }
     .btn-secondary { background: #2a2a35; color: white; }
-    .btn-small { padding: 6px 12px; font-size: 13px; width: auto; }
+    .btn-small { padding: 8px 14px; font-size: 13px; width: auto; }
+    .btn-danger { background: #7f1d1d; color: #fecaca; }
     .flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .prospect-item { background: #1a1a24; padding: 14px; border-radius: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .prospect-item.selected { border: 2px solid #c8f03c; background: #1e2a1a; }
-    .message-box { background: #0a0a0f; border-left: 4px solid #c8f03c; padding: 14px; border-radius: 12px; margin: 12px 0; white-space: pre-wrap; }
-    .toast { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #c8f03c; color: #0a0a0f; padding: 14px; border-radius: 9999px; text-align: center; font-weight: bold; z-index: 1000; }
-    .hidden { display: none; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    hr { margin: 12px 0; border-color: #2a2a35; }
+    .toast { position: fixed; bottom: 20px; left: 16px; right: 16px; background: #7dd3fc; color: #0a0a0f; padding: 14px; border-radius: 9999px; text-align: center; font-weight: bold; z-index: 1000; }
+    .hidden { display: none !important; }
+    .message-box { background: #0a0a0f; padding: 14px; border-radius: 12px; margin-top: 12px; white-space: pre-wrap; }
+    .message-box.vert { border-left: 4px solid #22c55e; }
+    .message-box.orange { border-left: 4px solid #f97316; }
+    .message-box.rouge { border-left: 4px solid #ef4444; }
+    .urgence-pill { display: inline-block; padding: 6px 12px; border-radius: 9999px; font-size: 12px; font-weight: 800; margin-bottom: 10px; }
+    .urgence-pill.vert { background: #14532d; color: #bbf7d0; }
+    .urgence-pill.orange { background: #7c2d12; color: #ffedd5; }
+    .urgence-pill.rouge { background: #7f1d1d; color: #fecaca; }
+    .thumb { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid #333; }
+    .hint { font-size: 12px; color: #64748b; margin-top: -4px; margin-bottom: 10px; line-height: 1.4; }
+    .hist-item { background: #1a1a24; border-radius: 12px; padding: 12px; margin-bottom: 8px; font-size: 13px; }
+    .hist-item strong { color: #7dd3fc; }
+    input[type="file"] { padding: 10px; }
+    .row-actions .btn, .row-actions .btn-secondary { flex: 1; min-width: 120px; }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>Agent <span>Cash</span> <span class="badge">Ultra · Vente directe</span></h1>
+  <h1>Interprète <span>Instant</span> <span class="badge">IA situationnelle</span></h1>
+  <p class="sub">Décris ce que tu vois / entends / reçois. L’outil propose jusqu’à <strong>3 conseils pratiques</strong> et une <strong>action prioritaire</strong>. Ce n’est <strong>pas</strong> un service d’urgence officiel : en cas de danger réel, appelle les <strong>secours</strong> (UE : <strong>112</strong>).</p>
 
-  <!-- Configuration personnelle (RIB + offre) -->
+  <!-- Clés -->
   <div class="card">
-    <label>💼 Ton offre (produit/service)</label>
-    <input type="text" id="offreNom" placeholder="Ex: Audit SEO complet" value="Pack Croissance Express">
-    <label>💰 Prix (€)</label>
-    <input type="number" id="prix" placeholder="1999" value="1999">
-    <label>🏦 Ton RIB ou lien de paiement (Stripe, Paypal, etc.)</label>
-    <textarea id="rib" rows="2" placeholder="FR76 1234 5678... ou lien https://pay..."></textarea>
-    <div class="flex" style="justify-content: space-between; margin-top: 6px;">
-      <button id="saveConfigBtn" class="btn-secondary btn-small">💾 Sauvegarder infos</button>
-      <span id="configStatus" style="font-size:12px; color:#c8f03c;"></span>
+    <label>🔑 Clé OpenRouter</label>
+    <input type="password" id="apiKey" placeholder="sk-or-v1-…" autocomplete="off">
+    <button type="button" id="saveKey" class="btn-secondary btn-small">Sauvegarder</button>
+    <div id="apiStatus" class="hint" style="margin-top:8px;"></div>
+    <label style="margin-top:12px;">🧠 Modèle</label>
+    <select id="modelSelect">
+      <option value="google/gemini-2.0-flash-001">google/gemini-2.0-flash-001 (texte + image)</option>
+      <option value="anthropic/claude-3.5-haiku">anthropic/claude-3.5-haiku</option>
+      <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
+    </select>
+  </div>
+
+  <!-- Firecrawl optionnel -->
+  <div class="card">
+    <label>🌐 Enrichissement web (optionnel, Firecrawl)</label>
+    <p class="hint">Uniquement si tu colles une <strong>URL https</strong> ci-dessous. Peut échouer depuis un fichier local (CORS) : dans ce cas, passe par Make/Telegram ou héberge la page en HTTPS.</p>
+    <label class="flex" style="align-items:center; gap:8px; color:#e8e4dc;">
+      <input type="checkbox" id="enrichToggle" style="width:auto; margin:0;">
+      Activer l’enrichissement (scrape de l’URL)
+    </label>
+    <label>URL Firecrawl (base API)</label>
+    <input type="text" id="firecrawlBase" placeholder="https://api.firecrawl.dev" value="https://api.firecrawl.dev">
+    <label>Clé API Firecrawl</label>
+    <input type="password" id="firecrawlKey" placeholder="fc-…" autocomplete="off">
+    <button type="button" id="saveFirecrawl" class="btn-secondary btn-small">Sauvegarder Firecrawl</button>
+  </div>
+
+  <!-- Entrée situation -->
+  <div class="card">
+    <label>📝 Situation (texte libre)</label>
+    <textarea id="situationInput" rows="5" placeholder="Ex : panneau inconnu sur la route, message suspect reçu, bruit bizarre près du compteur…"></textarea>
+    <label>🔗 URL de contexte (article, fiche, lieu…)</label>
+    <input type="url" id="contextUrl" placeholder="https://…">
+    <label>📷 Photo (fichier ou galerie)</label>
+    <input type="file" id="photoFile" accept="image/*">
+    <div id="photoPreviewWrap" class="hidden">
+      <img id="photoPreview" class="thumb" alt="Aperçu">
+      <div class="flex" style="margin-top:8px;">
+        <button type="button" id="clearPhoto" class="btn-secondary btn-small">Retirer la photo</button>
+      </div>
+    </div>
+    <div class="flex row-actions" style="margin-top:10px;">
+      <button type="button" id="btnCamera" class="btn-secondary">📸 Caméra</button>
+      <button type="button" id="btnDictation" class="btn-secondary">🎤 Dictée</button>
+      <button type="button" id="btnAudio5" class="btn-secondary">⏺️ Audio 5s</button>
+    </div>
+    <p id="dictationStatus" class="hint hidden"></p>
+    <button type="button" id="analyzeBtn" class="btn">🔎 Analyser la situation</button>
+  </div>
+
+  <!-- Résultat -->
+  <div id="resultCard" class="card hidden">
+    <label>✅ Analyse</label>
+    <div id="urgencePill" class="urgence-pill vert">—</div>
+    <div id="resultBox" class="message-box vert"></div>
+    <div class="flex" style="margin-top:10px;">
+      <button type="button" id="copyResult" class="btn-secondary btn-small">📋 Copier le résumé</button>
     </div>
   </div>
 
-  <!-- Clé API OpenRouter -->
+  <!-- Historique local -->
   <div class="card">
-    <label>🔑 Clé OpenRouter (gratuite sur openrouter.ai/keys)</label>
-    <input type="password" id="apiKey" placeholder="sk-or-v1-...">
-    <button id="saveKey" class="btn-secondary btn-small">Sauvegarder clé</button>
-    <div id="apiStatus" style="margin-top:8px; font-size:13px;"></div>
-  </div>
-
-  <!-- Trouver des clients par niche -->
-  <div class="card">
-    <label>🔍 Trouver des clients chauds (niche)</label>
-    <input id="niche" placeholder="Ex: SaaS B2B, coach sportif, agence marketing...">
-    <button id="findBtn" class="btn">🔎 Générer des prospects</button>
-    <div id="suggestedList"></div>
-  </div>
-
-  <!-- Ajout manuel -->
-  <div class="card">
-    <label>➕ Ajouter un prospect manuellement</label>
-    <div class="grid-2">
-      <input id="name" placeholder="Nom">
-      <input id="company" placeholder="Entreprise">
+    <div class="flex" style="justify-content:space-between; align-items:center;">
+      <label style="margin:0;">📚 Historique (ce téléphone)</label>
+      <button type="button" id="clearHistory" class="btn-secondary btn-small">Effacer</button>
     </div>
-    <input id="need" placeholder="Besoin / problème">
-    <button id="addBtn" class="btn">Ajouter</button>
-  </div>
-
-  <!-- Liste prospects & campagne -->
-  <div class="card">
-    <div class="flex" style="justify-content: space-between;">
-      <label>📋 Prospects (<span id="count">0</span>)</label>
-      <button id="deselectBtn" class="btn-secondary btn-small">Tout désélectionner</button>
-    </div>
-    <div id="prospectList"></div>
-    <button id="launchBtn" class="btn">⚡ Générer messages avec offre & RIB</button>
-  </div>
-
-  <!-- Messages générés -->
-  <div id="genArea" class="card hidden">
-    <label>✉️ Messages prêts à envoyer (copier/coller)</label>
-    <div id="messagesContainer"></div>
-  </div>
-
-  <!-- Mémoire de l'agent -->
-  <div class="card">
-    <label>🧠 Feedbacks (<span id="fbCount">0</span>) — apprentissage</label>
-    <button id="clearFb" class="btn-secondary btn-small">Effacer mémoire</button>
-    <div id="feedbackList" style="margin-top:12px;"></div>
+    <p class="hint">Stocké dans le navigateur uniquement.</p>
+    <div id="historyList"></div>
   </div>
 </div>
 
 <script>
-  // ========== ÉTAT ==========
-  let prospects = [];
-  let feedbacks = [];
-  let messages = {};          // { id: { linkedin, email } }
-  let selected = new Set();
-  let apiKey = localStorage.getItem('apiKey') || '';
-  let config = {
-    offreNom: localStorage.getItem('offreNom') || 'Pack Croissance Express',
-    prix: localStorage.getItem('prix') || '1999',
-    rib: localStorage.getItem('rib') || 'Mon RIB : FR76 1234 5678 0000 1234 5678 123'
-  };
+  const SYSTEM_INTERPRET = `Tu es un assistant d'interprétation de situation immédiate (sécurité, prudence, orientation).
+Règles strictes :
+1. Ne donne jamais d'instructions illégales ou dangereuses.
+2. Ne remplace jamais un avis médical, juridique, ni les services de secours. Pour une urgence vitale : oriente vers le 112 (Europe) ou les numéros locaux.
+3. Ne prescrit jamais de médicament, dose, posologie, ni diagnostic médical. Pour santé/médicaments : conseille de consulter un professionnel de santé ou un pharmacien.
+4. Ne prends pas de décisions financières à la place de l'utilisateur (pas de virement, pas de partage de codes).
+5. Si tu manques d'informations fiables, dis-le clairement et propose quoi observer / quelle question poser à un humain compétent.
+6. Reste factuel, prudent, et légal. Priorise la sécurité physique.
 
-  function newProspectId() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
-  }
+Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
+{"urgence":"vert|orange|rouge","action_principale":"une phrase courte","conseils":["conseil 1","conseil 2","conseil 3"],"rappel_secours":"phrase courte si pertinent, sinon ""}
+- urgence : vert = peu urgent / information ; orange = prudence / vérifications ; rouge = danger possible immédiat (orienter vers mise en sécurité et secours si nécessaire).
+- conseils : maximum 3 chaînes, concrètes et réalisables.`;
+
+  let apiKey = localStorage.getItem('apiKey') || '';
+  let firecrawlKey = localStorage.getItem('firecrawlKey') || '';
+  let firecrawlBase = localStorage.getItem('firecrawlBase') || 'https://api.firecrawl.dev';
+  let history = [];
+  let currentImageDataUrl = null;
+  let lastResultText = '';
 
   function stripJsonFence(text) {
     const t = String(text || '').trim();
@@ -119,42 +145,8 @@
     return m ? m[1].trim() : t;
   }
 
-  // ========== PERSISTANCE ==========
-  function saveAll() {
-    localStorage.setItem('prospects', JSON.stringify(prospects));
-    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-    localStorage.setItem('messages', JSON.stringify(messages));
-    localStorage.setItem('selected', JSON.stringify([...selected]));
-    localStorage.setItem('offreNom', config.offreNom);
-    localStorage.setItem('prix', config.prix);
-    localStorage.setItem('rib', config.rib);
-  }
-
-  function loadAll() {
-    prospects = JSON.parse(localStorage.getItem('prospects') || '[]').map(p => ({
-      ...p,
-      id: String(p.id != null ? p.id : newProspectId())
-    }));
-    feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
-    messages = JSON.parse(localStorage.getItem('messages') || '{}');
-    const rawSel = JSON.parse(localStorage.getItem('selected') || '[]');
-    selected = new Set(rawSel.map(String));
-    document.getElementById('offreNom').value = config.offreNom;
-    document.getElementById('prix').value = config.prix;
-    document.getElementById('rib').value = config.rib;
-    if (apiKey) document.getElementById('apiKey').value = apiKey;
-    updateUI();
-    renderProspects();
-    renderFeedbacks();
-    if (Object.keys(messages).length) document.getElementById('genArea').classList.remove('hidden');
-    renderMessages();
-  }
-
-  function updateUI() {
-    document.getElementById('count').textContent = prospects.length;
-    document.getElementById('fbCount').textContent = feedbacks.length;
-    document.getElementById('apiStatus').innerHTML = apiKey ? '✅ Clé OK' : '⚠️ Clé API requise';
-    document.getElementById('configStatus').innerHTML = '✅ Offre & RIB sauvegardés';
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]);
   }
 
   function showToast(msg) {
@@ -162,285 +154,393 @@
     t.className = 'toast';
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2200);
+    setTimeout(() => t.remove(), 2400);
   }
 
-  function escape(str) { return String(str).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[m]); }
-
-  // ========== RECHERCHE DE PROSPECTS PAR IA ==========
-  async function findProspects() {
-    const niche = document.getElementById('niche').value.trim();
-    if (!niche) return showToast("Entrez une niche");
-    if (!apiKey) return showToast("Clé API manquante");
-
-    const prompt = `Génère 5 prospects très qualifiés pour la niche : "${niche}".
-Chaque prospect doit avoir un nom, une entreprise, et un besoin spécifique (une phrase qui montre un problème payant).
-Réponds UNIQUEMENT en JSON : [{"nom":"...", "entreprise":"...", "besoin":"..."}]`;
-
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: "anthropic/claude-3-haiku",
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: 800,
-          temperature: 0.8
-        })
-      });
-      const data = await res.json();
-      const text = data.choices?.[0]?.message?.content || "[]";
-      let results = [];
-      try { results = JSON.parse(stripJsonFence(text)); } catch(e) { results = []; }
-      renderSuggested(results);
-    } catch(e) { showToast("Erreur réseau"); }
+  function updateApiStatus() {
+    document.getElementById('apiStatus').textContent = apiKey ? '✅ Clé OpenRouter enregistrée (localement).' : '⚠️ Ajoute une clé OpenRouter pour analyser.';
   }
 
-  function renderSuggested(suggested) {
-    const div = document.getElementById('suggestedList');
-    if (!suggested.length) { div.innerHTML = "<p>Aucun résultat.</p>"; return; }
-    let html = '<strong>Prospects trouvés :</strong>';
-    suggested.forEach((p, i) => {
-      html += `<div class="suggested" style="background:#1a1a24; border-radius:12px; padding:10px; margin-top:8px;">
-        <div><strong>${escape(p.nom || '?')}</strong> — ${escape(p.entreprise || '?')}<br><small>${escape(p.besoin || '')}</small></div>
-        <button class="btn-secondary btn-small add-suggested" data-index="${i}">+ Ajouter</button>
-      </div>`;
-    });
-    div.innerHTML = html;
-    document.querySelectorAll('.add-suggested').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = parseInt(btn.dataset.index, 10);
-        const s = suggested[idx];
-        prospects.unshift({ id: newProspectId(), nom: s.nom, entreprise: s.entreprise, besoin: s.besoin });
-        saveAll();
-        renderProspects();
-        updateUI();
-        showToast("Prospect ajouté");
-      });
-    });
+  function saveHistory() {
+    localStorage.setItem('interpretHistory', JSON.stringify(history.slice(-40)));
   }
 
-  // ========== CRUD PROSPECTS ==========
-  function addManualProspect() {
-    const nom = document.getElementById('name').value.trim();
-    const entreprise = document.getElementById('company').value.trim();
-    const besoin = document.getElementById('need').value.trim();
-    if (!nom || !entreprise || !besoin) return showToast("Tous les champs requis");
-    prospects.push({ id: newProspectId(), nom, entreprise, besoin });
-    saveAll();
-    renderProspects();
-    updateUI();
-    document.getElementById('name').value = '';
-    document.getElementById('company').value = '';
-    document.getElementById('need').value = '';
-    showToast("Prospect ajouté");
+  function loadAll() {
+    apiKey = localStorage.getItem('apiKey') || '';
+    firecrawlKey = localStorage.getItem('firecrawlKey') || '';
+    firecrawlBase = localStorage.getItem('firecrawlBase') || 'https://api.firecrawl.dev';
+    history = JSON.parse(localStorage.getItem('interpretHistory') || '[]');
+    document.getElementById('apiKey').value = apiKey;
+    document.getElementById('firecrawlKey').value = firecrawlKey;
+    document.getElementById('firecrawlBase').value = firecrawlBase;
+    document.getElementById('enrichToggle').checked = localStorage.getItem('enrichToggle') === '1';
+    updateApiStatus();
+    renderHistory();
   }
 
-  function renderProspects() {
-    const div = document.getElementById('prospectList');
-    if (!prospects.length) { div.innerHTML = '<div style="padding:30px;text-align:center;color:#555;">Aucun prospect</div>'; return; }
-    let html = '';
-    prospects.forEach(p => {
-      const sid = escape(String(p.id));
-      const sel = selected.has(String(p.id)) ? 'selected' : '';
-      html += `<div class="prospect-item ${sel}" data-id="${sid}">
-        <div><strong>${escape(p.nom)}</strong><br><span style="color:#c8f03c;">${escape(p.entreprise)}</span><br><small>${escape(p.besoin)}</small></div>
-        <button class="delete-prospect" data-id="${sid}" style="background:none; border:none; font-size:22px;">🗑️</button>
-      </div>`;
-    });
-    div.innerHTML = html;
-    // Sélection
-    div.querySelectorAll('.prospect-item').forEach(el => {
-      el.addEventListener('click', (e) => {
-        if (e.target.classList.contains('delete-prospect')) return;
-        const id = el.dataset.id;
-        selected.has(id) ? selected.delete(id) : selected.add(id);
-        saveAll();
-        renderProspects();
-      });
-    });
-    // Suppression
-    div.querySelectorAll('.delete-prospect').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        prospects = prospects.filter(p => String(p.id) !== id);
-        selected.delete(id);
-        delete messages[id];
-        saveAll();
-        renderProspects();
-        renderMessages();
-        updateUI();
-      });
-    });
-  }
-
-  // ========== GÉNÉRATION AVEC OFFRE + RIB ==========
-  async function generateForProspect(prospect) {
-    if (!apiKey) { showToast("Clé API manquante"); return null; }
-    const pid = String(prospect.id);
-    const recentFeedbacks = feedbacks.slice(-8);
-    let fbText = "";
-    if (recentFeedbacks.length) {
-      fbText = "\n\nFeedbacks précédents (à intégrer) :\n" + recentFeedbacks.map(f => `- Ancien: "${f.ancien}" → Correction: "${f.correction}"`).join("\n");
+  function renderHistory() {
+    const div = document.getElementById('historyList');
+    if (!history.length) {
+      div.innerHTML = '<div class="hint">Aucune analyse enregistrée.</div>';
+      return;
     }
-    const offre = config.offreNom;
-    const prix = config.prix;
-    const rib = config.rib;
-    const prompt = `Tu es un commercial expert en closing. Prospect : ${prospect.nom} (${prospect.entreprise}), besoin : ${prospect.besoin}.
-Notre offre : ${offre} à ${prix}€.
-Mode de paiement : ${rib}.
-
-Génère :
-1. Un message LinkedIn court (2-4 phrases) très percutant, personnalisé, qui mentionne l'offre et une action claire (ex: "réservez votre audit").
-2. Un email (sujet + corps) qui détaille la valeur, inclut le prix et le RIB/paiement pour facturation immédiate.
-
-Style : professionnel, amical, urgent mais non agressif.
-${fbText}
-Réponds UNIQUEMENT en JSON avec les clés "linkedin" et "email".`;
-
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: "anthropic/claude-3-haiku",
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: 800,
-          temperature: 0.75
-        })
-      });
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content || "{}";
-      let parsed = {};
-      try { parsed = JSON.parse(stripJsonFence(content)); } catch(e) { parsed = { linkedin: content, email: "" }; }
-      const linkedinMsg = (parsed.linkedin || "Message LinkedIn non généré") + `\n\n💰 Offre spéciale : ${offre} à ${prix}€. Paiement sécurisé : ${rib}`;
-      const emailMsg = parsed.email || `Sujet: Votre solution ${offre}\n\nBonjour ${prospect.nom}, ...\nPrix: ${prix}€. RIB: ${rib}`;
-      messages[pid] = { linkedin: linkedinMsg, email: emailMsg };
-      saveAll();
-      return messages[pid];
-    } catch(e) { showToast("Erreur génération"); return null; }
+    let html = '';
+    [...history].reverse().slice(0, 15).forEach((h) => {
+      const u = escapeHtml(h.urgence || '?');
+      html += `<div class="hist-item"><strong>${u}</strong> · ${escapeHtml(h.action_principale || '')}<br><span class="hint">${escapeHtml(h.date || '')}</span></div>`;
+    });
+    div.innerHTML = html;
   }
 
-  async function launch() {
-    const targets = selected.size ? prospects.filter(p => selected.has(String(p.id))) : prospects;
-    if (!targets.length) return showToast(!prospects.length ? "Ajoutez des prospects" : "Aucun prospect dans la sélection");
-    if (!apiKey) return showToast("Clé API manquante");
-    // Mettre à jour la config depuis les champs
-    config.offreNom = document.getElementById('offreNom').value.trim() || config.offreNom;
-    config.prix = document.getElementById('prix').value.trim() || config.prix;
-    config.rib = document.getElementById('rib').value.trim() || config.rib;
-    saveAll();
-    document.getElementById('genArea').classList.remove('hidden');
-    for (let p of targets) {
-      const pid = String(p.id);
-      if (!messages[pid]) {
-        await generateForProspect(p);
-        renderMessages();
-        await new Promise(r => setTimeout(r, 500));
+  function normalizeUrgence(u) {
+    const x = String(u || '').toLowerCase();
+    if (x.includes('rouge') || x === 'red') return 'rouge';
+    if (x.includes('orange') || x === 'amber') return 'orange';
+    return 'vert';
+  }
+
+  function buildUserPayload(inputText, imageDataUrl, enrichedMarkdown) {
+    let text = `Situation décrite par l'utilisateur :\n${inputText || '(aucun texte)'}\n`;
+    if (enrichedMarkdown) {
+      text += `\n--- Contexte page (extrait markdown, peut être incomplet) ---\n${enrichedMarkdown.slice(0, 12000)}\n`;
+    }
+    if (imageDataUrl) {
+      text += `\nUne image est fournie : décris ce qui est visible de façon prudente, puis intègre cela dans l'analyse JSON demandée.`;
+    }
+    text += `\nRéponds uniquement avec le JSON demandé dans les règles système.`;
+    return text;
+  }
+
+  async function enrichWithFirecrawl(pageUrl) {
+    const base = (document.getElementById('firecrawlBase').value || '').replace(/\/+$/, '');
+    const key = (firecrawlKey || document.getElementById('firecrawlKey').value || '').trim();
+    if (!key) throw new Error('Clé Firecrawl manquante');
+    const res = await fetch(`${base}/v1/scrape`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: pageUrl,
+        formats: ['markdown'],
+        onlyMainContent: true
+      })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || data.message || `HTTP ${res.status}`);
+    const md = (data.data && (data.data.markdown || data.data.md)) || data.markdown || '';
+    return typeof md === 'string' ? md : '';
+  }
+
+  async function callOpenRouterChat(messages, model) {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': location.origin === 'null' ? 'https://localhost' : location.origin,
+        'X-Title': 'Interprete Instant'
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        max_tokens: 900,
+        temperature: 0.35
+      })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error?.message || data.message || `OpenRouter ${res.status}`);
+    return data.choices?.[0]?.message?.content || '';
+  }
+
+  function buildMessages(userText, imageDataUrl) {
+    const userContent = imageDataUrl
+      ? [
+          { type: 'text', text: userText },
+          { type: 'image_url', image_url: { url: imageDataUrl } }
+        ]
+      : userText;
+    return [
+      { role: 'system', content: SYSTEM_INTERPRET },
+      { role: 'user', content: userContent }
+    ];
+  }
+
+  function parseInterpretJson(raw) {
+    const cleaned = stripJsonFence(raw);
+    try {
+      const o = JSON.parse(cleaned);
+      return {
+        urgence: normalizeUrgence(o.urgence),
+        action_principale: String(o.action_principale || '').trim(),
+        conseils: Array.isArray(o.conseils) ? o.conseils.slice(0, 3).map(String) : [],
+        rappel_secours: String(o.rappel_secours || '').trim()
+      };
+    } catch {
+      return {
+        urgence: 'orange',
+        action_principale: 'Réponse non structurée. Vérifie les faits avec une source fiable.',
+        conseils: [String(cleaned).slice(0, 400)],
+        rappel_secours: ''
+      };
+    }
+  }
+
+  function displayResult(parsed) {
+    const card = document.getElementById('resultCard');
+    const pill = document.getElementById('urgencePill');
+    const box = document.getElementById('resultBox');
+    const u = parsed.urgence;
+    pill.className = 'urgence-pill ' + (u === 'rouge' ? 'rouge' : u === 'orange' ? 'orange' : 'vert');
+    pill.textContent = u === 'rouge' ? '🔴 Urgence élevée' : u === 'orange' ? '🟠 Prudence' : '🟢 Situation calme / info';
+
+    box.className = 'message-box ' + (u === 'rouge' ? 'rouge' : u === 'orange' ? 'orange' : 'vert');
+    const lines = [];
+    lines.push('▶ Action recommandée : ' + parsed.action_principale);
+    if (parsed.conseils.length) {
+      lines.push('');
+      parsed.conseils.forEach((c, i) => lines.push(`${i + 1}. ${c}`));
+    }
+    if (parsed.rappel_secours) {
+      lines.push('');
+      lines.push('⚠️ ' + parsed.rappel_secours);
+    }
+    lastResultText = lines.join('\n');
+    box.textContent = lastResultText;
+    card.classList.remove('hidden');
+  }
+
+  async function captureFromCamera() {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      showToast('Caméra non disponible sur ce navigateur');
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' } },
+      audio: false
+    });
+    const video = document.createElement('video');
+    video.playsInline = true;
+    video.muted = true;
+    video.srcObject = stream;
+    await video.play();
+    await new Promise(r => setTimeout(r, 200));
+    const w = video.videoWidth;
+    const h = video.videoHeight;
+    if (!w || !h) {
+      stream.getTracks().forEach(t => t.stop());
+      showToast('Flux vidéo invalide');
+      return;
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    stream.getTracks().forEach(t => t.stop());
+    currentImageDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+    showPhotoPreview();
+    showToast('Photo capturée');
+  }
+
+  function showPhotoPreview() {
+    const wrap = document.getElementById('photoPreviewWrap');
+    const img = document.getElementById('photoPreview');
+    if (currentImageDataUrl) {
+      img.src = currentImageDataUrl;
+      wrap.classList.remove('hidden');
+    } else {
+      wrap.classList.add('hidden');
+      img.removeAttribute('src');
+    }
+  }
+
+  let mediaRecorder = null;
+  let audioChunks = [];
+
+  async function recordAudio5s() {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      showToast('Micro non disponible');
+      return;
+    }
+    showToast('Enregistrement 5 secondes…');
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size) audioChunks.push(e.data); };
+    mediaRecorder.start();
+    await new Promise(r => setTimeout(r, 5000));
+    mediaRecorder.stop();
+    await new Promise((resolve) => { mediaRecorder.onstop = resolve; });
+    stream.getTracks().forEach(t => t.stop());
+    const blob = new Blob(audioChunks, { type: audioChunks[0]?.type || 'audio/webm' });
+    await transcribeAndAppend(blob);
+  }
+
+  async function transcribeAndAppend(blob) {
+    if (!apiKey) {
+      showToast('Clé OpenRouter requise pour la transcription');
+      return;
+    }
+    const fd = new FormData();
+    fd.append('model', 'openai/whisper-large-v3');
+    fd.append('file', blob, 'clip.webm');
+    try {
+      const res = await fetch('https://openrouter.ai/api/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        body: fd
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error?.message || data.message || `HTTP ${res.status}`);
+      const text = data.text || data.transcript || '';
+      if (!text) throw new Error('Transcription vide');
+      const ta = document.getElementById('situationInput');
+      const prefix = ta.value.trim() ? ta.value.trim() + '\n\n' : '';
+      ta.value = prefix + '[Transcription audio] ' + text;
+      showToast('Audio transcrit dans le texte');
+    } catch (e) {
+      console.warn(e);
+      showToast('Transcription impossible : décris le son à la main ou utilise la dictée.');
+    }
+  }
+
+  function startDictation() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const status = document.getElementById('dictationStatus');
+    if (!SR) {
+      showToast('Dictée non supportée (essayez Chrome / Android)');
+      return;
+    }
+    const rec = new SR();
+    rec.lang = 'fr-FR';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    status.classList.remove('hidden');
+    status.textContent = 'Écoute… parle maintenant.';
+    rec.onresult = (ev) => {
+      const t = ev.results[0][0].transcript;
+      const ta = document.getElementById('situationInput');
+      ta.value = (ta.value.trim() ? ta.value.trim() + '\n\n' : '') + t;
+      status.textContent = 'Dictée terminée.';
+      showToast('Texte ajouté');
+    };
+    rec.onerror = () => {
+      status.textContent = 'Erreur dictée.';
+      showToast('Dictée interrompue');
+    };
+    rec.onend = () => setTimeout(() => status.classList.add('hidden'), 2000);
+    rec.start();
+  }
+
+  async function interpretSituation() {
+    const input = document.getElementById('situationInput').value.trim();
+    const url = document.getElementById('contextUrl').value.trim();
+    if (!input && !currentImageDataUrl && !url) {
+      showToast('Ajoute du texte, une URL ou une photo');
+      return;
+    }
+    if (!apiKey) {
+      showToast('Clé OpenRouter manquante');
+      return;
+    }
+
+    let enriched = '';
+    const enrichOn = document.getElementById('enrichToggle').checked;
+    if (enrichOn && url && /^https:\/\//i.test(url)) {
+      try {
+        showToast('Enrichissement en cours…');
+        enriched = await enrichWithFirecrawl(url);
+        if (!enriched) showToast('Enrichissement vide (vérifie l’URL ou la clé)');
+      } catch (e) {
+        console.warn(e);
+        showToast('Enrichissement indisponible (CORS, clé ou quota)');
       }
     }
-    renderMessages();
-  }
 
-  function corrFieldId(prospectId) {
-    return 'corr-' + String(prospectId).replace(/[^a-zA-Z0-9_-]/g, '_');
-  }
+    const userPayload = buildUserPayload(input, currentImageDataUrl, enriched);
+    const model = document.getElementById('modelSelect').value;
+    const useVisionModel = !!currentImageDataUrl;
+    const modelFinal = useVisionModel && !/gemini|gpt-4o|claude-3|vision/i.test(model)
+      ? 'google/gemini-2.0-flash-001'
+      : model;
 
-  function renderMessages() {
-    const targets = selected.size ? prospects.filter(p => selected.has(String(p.id))) : prospects;
-    const container = document.getElementById('messagesContainer');
-    if (!targets.length) { container.innerHTML = '<div style="padding:20px;text-align:center;">Aucun prospect sélectionné</div>'; return; }
-    let html = '';
-    for (let p of targets) {
-      const pid = String(p.id);
-      const msg = messages[pid];
-      const cid = corrFieldId(pid);
-      html += `<div style="margin-bottom:28px; border-bottom:1px solid #2a2a35; padding-bottom:16px;">
-        <strong>${escape(p.nom)}</strong> — ${escape(p.entreprise)}<br>
-        <small>${escape(p.besoin)}</small>`;
-      if (msg) {
-        if (msg.linkedin) html += `<div class="message-box"><strong>🔗 LinkedIn</strong><br>${escape(msg.linkedin)}<br><button type="button" class="btn-small btn-secondary copy-btn" data-text="${encodeURIComponent(msg.linkedin)}">📋 Copier</button></div>`;
-        if (msg.email) html += `<div class="message-box"><strong>✉️ Email</strong><br>${escape(msg.email)}<br><button type="button" class="btn-small btn-secondary copy-btn" data-text="${encodeURIComponent(msg.email)}">📋 Copier</button></div>`;
-        html += `<div class="flex"><textarea id="${escape(cid)}" rows="2" placeholder="Correction (meilleure version)..." style="flex:1;"></textarea><button type="button" class="btn-small btn-secondary send-correction" data-id="${escape(pid)}">📘 Envoyer correction</button></div>`;
-      } else {
-        html += `<div class="status">⏳ En attente de génération</div>`;
-      }
-      html += `</div>`;
+    try {
+      showToast('Analyse en cours…');
+      const messages = buildMessages(userPayload, currentImageDataUrl);
+      const raw = await callOpenRouterChat(messages, modelFinal);
+      const parsed = parseInterpretJson(raw);
+      displayResult(parsed);
+      history.push({
+        date: new Date().toISOString(),
+        urgence: parsed.urgence,
+        action_principale: parsed.action_principale,
+        conseils: parsed.conseils,
+        snippet: (input || url || 'image').slice(0, 120)
+      });
+      saveHistory();
+      renderHistory();
+    } catch (e) {
+      console.warn(e);
+      showToast(e.message || 'Erreur réseau / API');
     }
-    container.innerHTML = html;
-    // Copie
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const raw = btn.getAttribute('data-text');
-        const text = raw ? decodeURIComponent(raw) : '';
-        navigator.clipboard.writeText(text);
-        showToast("Message copié ! Envoyez-le maintenant.");
-      });
-    });
-    // Correction + apprentissage
-    document.querySelectorAll('.send-correction').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const textarea = document.getElementById(corrFieldId(id));
-        const correction = textarea && textarea.value.trim();
-        if (!correction) return;
-        const prospect = prospects.find(p => String(p.id) === String(id));
-        if (!prospect) return;
-        const ancienMsg = messages[id]?.linkedin || messages[id]?.email || "";
-        if (ancienMsg) {
-          feedbacks.push({ id: Date.now(), ancien: ancienMsg, correction, date: new Date().toISOString() });
-          if (feedbacks.length > 40) feedbacks.shift();
-          saveAll();
-          renderFeedbacks();
-          updateUI();
-          textarea.value = "";
-          showToast("Correction enregistrée – l'agent s'améliore !");
-          await generateForProspect(prospect);
-          renderMessages();
-        }
-      });
-    });
   }
 
-  function renderFeedbacks() {
-    const div = document.getElementById('feedbackList');
-    if (!feedbacks.length) { div.innerHTML = '<div style="color:#aaa;">Aucun feedback. Corrigez des messages pour améliorer l’IA.</div>'; return; }
-    let html = '';
-    [...feedbacks].reverse().slice(0, 12).forEach((fb, i) => {
-      const preview = fb.ancien.length > 80 ? escape(fb.ancien.substring(0, 80)) + '…' : escape(fb.ancien);
-      html += `<div style="background:#1a1a24; border-radius:12px; padding:10px; margin-bottom:8px;">
-        <div style="font-size:11px; color:#c8f03c;">#${feedbacks.length - i}</div>
-        <div style="font-size:12px; color:#ff8888;">❌ Ancien: ${preview}</div>
-        <div style="font-size:12px; color:#c8f03c;">✅ Correction: ${escape(fb.correction)}</div>
-      </div>`;
-    });
-    div.innerHTML = html;
-  }
+  document.getElementById('photoFile').addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      currentImageDataUrl = typeof r.result === 'string' ? r.result : null;
+      showPhotoPreview();
+    };
+    r.readAsDataURL(f);
+  });
 
-  function clearFeedbacks() { feedbacks = []; saveAll(); renderFeedbacks(); updateUI(); showToast("Mémoire effacée"); }
-  function deselectAll() { selected.clear(); saveAll(); renderProspects(); }
+  document.getElementById('clearPhoto').addEventListener('click', () => {
+    currentImageDataUrl = null;
+    document.getElementById('photoFile').value = '';
+    showPhotoPreview();
+  });
 
-  // ========== EVENTS & INIT ==========
+  document.getElementById('btnCamera').addEventListener('click', () => {
+    captureFromCamera().catch(() => showToast('Caméra refusée ou indisponible'));
+  });
+  document.getElementById('btnDictation').addEventListener('click', startDictation);
+  document.getElementById('btnAudio5').addEventListener('click', () => {
+    recordAudio5s().catch(() => showToast('Micro refusé ou erreur audio'));
+  });
+
+  document.getElementById('analyzeBtn').addEventListener('click', interpretSituation);
+
   document.getElementById('saveKey').addEventListener('click', () => {
     apiKey = document.getElementById('apiKey').value.trim();
     if (apiKey) localStorage.setItem('apiKey', apiKey);
-    updateUI();
-    showToast("Clé sauvegardée");
+    updateApiStatus();
+    showToast('Clé OpenRouter sauvegardée');
   });
-  document.getElementById('saveConfigBtn').addEventListener('click', () => {
-    config.offreNom = document.getElementById('offreNom').value.trim();
-    config.prix = document.getElementById('prix').value.trim();
-    config.rib = document.getElementById('rib').value.trim();
-    saveAll();
-    showToast("Offre & RIB sauvegardés");
-    updateUI();
+
+  document.getElementById('saveFirecrawl').addEventListener('click', () => {
+    firecrawlKey = document.getElementById('firecrawlKey').value.trim();
+    firecrawlBase = document.getElementById('firecrawlBase').value.trim() || 'https://api.firecrawl.dev';
+    localStorage.setItem('firecrawlKey', firecrawlKey);
+    localStorage.setItem('firecrawlBase', firecrawlBase);
+    localStorage.setItem('enrichToggle', document.getElementById('enrichToggle').checked ? '1' : '0');
+    showToast('Paramètres Firecrawl sauvegardés');
   });
-  document.getElementById('findBtn').addEventListener('click', findProspects);
-  document.getElementById('addBtn').addEventListener('click', addManualProspect);
-  document.getElementById('launchBtn').addEventListener('click', launch);
-  document.getElementById('clearFb').addEventListener('click', clearFeedbacks);
-  document.getElementById('deselectBtn').addEventListener('click', deselectAll);
+
+  document.getElementById('enrichToggle').addEventListener('change', () => {
+    localStorage.setItem('enrichToggle', document.getElementById('enrichToggle').checked ? '1' : '0');
+  });
+
+  document.getElementById('copyResult').addEventListener('click', () => {
+    if (!lastResultText) return;
+    navigator.clipboard.writeText(lastResultText).then(() => showToast('Copié')).catch(() => showToast('Copie impossible'));
+  });
+
+  document.getElementById('clearHistory').addEventListener('click', () => {
+    history = [];
+    saveHistory();
+    renderHistory();
+    showToast('Historique effacé');
+  });
 
   loadAll();
 </script>
