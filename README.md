@@ -4,11 +4,13 @@
 
 Page **statique** pour analyser une situation du moment :
 
-- **Texte** libre, **URL** de contexte, **photo** (fichier ou caméra).
-- **Dictée** (Web Speech API, surtout Chrome / Android) et **audio 5 s** → transcription via **OpenRouter Whisper** (`/v1/audio/transcriptions`) quand une clé est enregistrée.
-- **Enrichissement Firecrawl** (optionnel) : scrape `https://…` saisi dans le champ URL ; peut échouer en **file://** ou sans CORS — prévoir Make/Telegram ou hébergement HTTPS.
-- **Sortie structurée** : niveau d’urgence **vert / orange / rouge**, **action principale**, jusqu’à **3 conseils**, rappel secours si pertinent.
-- **Historique** et clés stockés en **localStorage** (uniquement ce navigateur).
+- **Texte** libre, **URL** de contexte (même sans Firecrawl : l’URL est transmise au modèle), **photo** (fichier ou caméra) avec **redimensionnement** avant envoi et limite de taille.
+- **Dictée** (Web Speech API, surtout Chrome / Android) et **audio 5 s** → transcription via **OpenRouter Whisper** ; choix automatique **WebM / MP4** selon le navigateur.
+- **Enrichissement Firecrawl** (optionnel) : scrape `https://…` ; messages d’erreur plus clairs ; peut échouer en **file://** (CORS) — prévoir HTTPS ou Make/Telegram.
+- **Sortie structurée** : urgence **vert / orange / rouge**, **action principale**, jusqu’à **3 conseils** ; parsing JSON **tolérant** (fences markdown, texte autour du JSON).
+- **UX** : panneau réglages repliable, **Ctrl+Entrée** pour lancer l’analyse, anti double-clic pendant l’appel API, toasts d’erreur distincts, **historique** cliquable pour recharger le texte, confirmation avant effacement total.
+- **Accessibilité** : `aria-live` sur le résultat, libellés `for`/`id`, focus visible, zones tactiles élargies.
+- **Historique** et clés en **localStorage** ; bouton pour **effacer la clé** OpenRouter du navigateur ; **modèle mémorisé** entre sessions.
 
 **Urgence réelle :** compose le **112** (ou les numéros locaux). Cet outil n’est pas un service de secours agréé.
 

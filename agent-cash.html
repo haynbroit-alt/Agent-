@@ -3,27 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="description" content="Analyse situationnelle locale : texte, URL, photo, dictée. OpenRouter. Pas un service de secours officiel.">
   <title>Interprète Instant • Analyse situationnelle</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0a0f; color: #e8e4dc; font-family: system-ui, sans-serif; padding: 16px; padding-bottom: 96px; }
+    body { background: #0a0a0f; color: #e8e4dc; font-family: system-ui, sans-serif; padding: 16px; padding-bottom: 120px; line-height: 1.45; }
     .container { max-width: 640px; margin: 0 auto; }
     h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     h1 span { color: #7dd3fc; }
     .badge { background: #7dd3fc; color: #0a0a0f; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
     .sub { color: #94a3b8; font-size: 14px; margin-bottom: 16px; line-height: 1.45; }
     .card { background: #111118; border: 1px solid rgba(125,211,252,0.25); border-radius: 20px; padding: 16px; margin-bottom: 16px; }
-    input, textarea, select { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; margin-bottom: 10px; font-size: 15px; }
+    input, textarea, select { width: 100%; background: #1a1a24; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; margin-bottom: 10px; font-size: 16px; }
     label { display: block; color: #7dd3fc; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .btn { background: #7dd3fc; color: #0a0a0f; border: none; padding: 12px 20px; border-radius: 9999px; font-weight: bold; font-size: 15px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; }
+    .btn { background: #7dd3fc; color: #0a0a0f; border: none; padding: 14px 20px; border-radius: 9999px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; text-align: center; touch-action: manipulation; min-height: 48px; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn-secondary { background: #2a2a35; color: white; }
-    .btn-small { padding: 8px 14px; font-size: 13px; width: auto; }
-    .btn-danger { background: #7f1d1d; color: #fecaca; }
+    .btn-small { padding: 8px 14px; font-size: 13px; width: auto; min-height: 40px; }
     .flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .toast { position: fixed; bottom: 20px; left: 16px; right: 16px; background: #7dd3fc; color: #0a0a0f; padding: 14px; border-radius: 9999px; text-align: center; font-weight: bold; z-index: 1000; }
+    .toast { position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 16px; right: 16px; background: #7dd3fc; color: #0a0a0f; padding: 14px; border-radius: 9999px; text-align: center; font-weight: bold; z-index: 1000; box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
+    .toast.err { background: #fecaca; color: #450a0a; }
     .hidden { display: none !important; }
-    .message-box { background: #0a0a0f; padding: 14px; border-radius: 12px; margin-top: 12px; white-space: pre-wrap; }
+    .message-box { background: #0a0a0f; padding: 14px; border-radius: 12px; margin-top: 12px; white-space: pre-wrap; word-break: break-word; }
     .message-box.vert { border-left: 4px solid #22c55e; }
     .message-box.orange { border-left: 4px solid #f97316; }
     .message-box.rouge { border-left: 4px solid #ef4444; }
@@ -31,113 +34,140 @@
     .urgence-pill.vert { background: #14532d; color: #bbf7d0; }
     .urgence-pill.orange { background: #7c2d12; color: #ffedd5; }
     .urgence-pill.rouge { background: #7f1d1d; color: #fecaca; }
-    .thumb { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid #333; }
-    .hint { font-size: 12px; color: #64748b; margin-top: -4px; margin-bottom: 10px; line-height: 1.4; }
-    .hist-item { background: #1a1a24; border-radius: 12px; padding: 12px; margin-bottom: 8px; font-size: 13px; }
+    .thumb { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid #333; max-height: 280px; object-fit: contain; background: #000; }
+    .hint { font-size: 12px; color: #64748b; margin-top: -4px; margin-bottom: 10px; line-height: 1.45; }
+    .hist-item { background: #1a1a24; border-radius: 12px; padding: 12px; margin-bottom: 8px; font-size: 13px; cursor: pointer; border: 1px solid transparent; }
+    .hist-item:hover, .hist-item:focus-visible { border-color: rgba(125,211,252,0.45); }
     .hist-item strong { color: #7dd3fc; }
     input[type="file"] { padding: 10px; }
-    .row-actions .btn, .row-actions .btn-secondary { flex: 1; min-width: 120px; }
+    .row-actions .btn-secondary { flex: 1; min-width: 100px; }
+    details.card { padding: 12px 16px; }
+    details.card > summary { cursor: pointer; font-weight: 700; color: #7dd3fc; list-style: none; }
+    details.card > summary::-webkit-details-marker { display: none; }
+    .kbd { font-size: 11px; background: #1a1a24; padding: 2px 6px; border-radius: 6px; border: 1px solid #333; }
+    a { color: #7dd3fc; }
+    *:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>Interprète <span>Instant</span> <span class="badge">IA situationnelle</span></h1>
-  <p class="sub">Décris ce que tu vois / entends / reçois. L’outil propose jusqu’à <strong>3 conseils pratiques</strong> et une <strong>action prioritaire</strong>. Ce n’est <strong>pas</strong> un service d’urgence officiel : en cas de danger réel, appelle les <strong>secours</strong> (UE : <strong>112</strong>).</p>
+  <header>
+    <h1>Interprète <span>Instant</span> <span class="badge">IA situationnelle</span></h1>
+    <p class="sub">Décris ce que tu vois, entends ou reçois. Jusqu’à <strong>3 conseils</strong> et une <strong>action prioritaire</strong>. Ce n’est <strong>pas</strong> un service de secours : danger réel → <strong>112</strong> (UE) ou numéros locaux.</p>
+  </header>
 
-  <!-- Clés -->
-  <div class="card">
-    <label>🔑 Clé OpenRouter</label>
-    <input type="password" id="apiKey" placeholder="sk-or-v1-…" autocomplete="off">
-    <button type="button" id="saveKey" class="btn-secondary btn-small">Sauvegarder</button>
-    <div id="apiStatus" class="hint" style="margin-top:8px;"></div>
-    <label style="margin-top:12px;">🧠 Modèle</label>
-    <select id="modelSelect">
-      <option value="google/gemini-2.0-flash-001">google/gemini-2.0-flash-001 (texte + image)</option>
-      <option value="anthropic/claude-3.5-haiku">anthropic/claude-3.5-haiku</option>
-      <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
-    </select>
-  </div>
+  <details class="card" id="settingsPanel">
+    <summary>⚙️ Clés API &amp; options avancées</summary>
+    <div style="margin-top:12px;">
+      <label for="apiKey">🔑 Clé OpenRouter</label>
+      <input type="password" id="apiKey" placeholder="sk-or-v1-…" autocomplete="off" spellcheck="false">
+      <div class="flex">
+        <button type="button" id="saveKey" class="btn-secondary btn-small">Sauvegarder</button>
+        <button type="button" id="clearKey" class="btn-secondary btn-small" title="Retirer la clé de ce navigateur">Effacer clé</button>
+      </div>
+      <div id="apiStatus" class="hint" style="margin-top:8px;" role="status"></div>
+      <label for="modelSelect" style="margin-top:12px;">🧠 Modèle</label>
+      <select id="modelSelect" aria-describedby="modelHint">
+        <option value="google/gemini-2.0-flash-001">google/gemini-2.0-flash-001 (texte + image)</option>
+        <option value="anthropic/claude-3.5-haiku">anthropic/claude-3.5-haiku</option>
+        <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
+        <option value="openai/gpt-4o">openai/gpt-4o</option>
+      </select>
+      <p id="modelHint" class="hint">Avec photo, un modèle vision est requis ; bascule automatique si besoin.</p>
+    </div>
+    <hr style="margin:16px 0;border-color:#2a2a35;">
+    <div>
+      <label for="enrichToggle" class="flex" style="align-items:center; gap:8px; color:#e8e4dc; margin-bottom:10px;">
+        <input type="checkbox" id="enrichToggle" style="width:auto; margin:0;">
+        Enrichir via Firecrawl (scrape de l’URL ci-dessous)
+      </label>
+      <label for="firecrawlBase">URL de base Firecrawl</label>
+      <input type="text" id="firecrawlBase" placeholder="https://api.firecrawl.dev" value="https://api.firecrawl.dev" spellcheck="false">
+      <label for="firecrawlKey">Clé API Firecrawl</label>
+      <input type="password" id="firecrawlKey" placeholder="fc-…" autocomplete="off">
+      <button type="button" id="saveFirecrawl" class="btn-secondary btn-small">Sauvegarder Firecrawl</button>
+      <p class="hint">Depuis <code>file://</code>, Firecrawl peut être bloqué (CORS). Sers la page en HTTPS ou passe par Make.</p>
+    </div>
+  </details>
 
-  <!-- Firecrawl optionnel -->
-  <div class="card">
-    <label>🌐 Enrichissement web (optionnel, Firecrawl)</label>
-    <p class="hint">Uniquement si tu colles une <strong>URL https</strong> ci-dessous. Peut échouer depuis un fichier local (CORS) : dans ce cas, passe par Make/Telegram ou héberge la page en HTTPS.</p>
-    <label class="flex" style="align-items:center; gap:8px; color:#e8e4dc;">
-      <input type="checkbox" id="enrichToggle" style="width:auto; margin:0;">
-      Activer l’enrichissement (scrape de l’URL)
-    </label>
-    <label>URL Firecrawl (base API)</label>
-    <input type="text" id="firecrawlBase" placeholder="https://api.firecrawl.dev" value="https://api.firecrawl.dev">
-    <label>Clé API Firecrawl</label>
-    <input type="password" id="firecrawlKey" placeholder="fc-…" autocomplete="off">
-    <button type="button" id="saveFirecrawl" class="btn-secondary btn-small">Sauvegarder Firecrawl</button>
-  </div>
-
-  <!-- Entrée situation -->
-  <div class="card">
-    <label>📝 Situation (texte libre)</label>
-    <textarea id="situationInput" rows="5" placeholder="Ex : panneau inconnu sur la route, message suspect reçu, bruit bizarre près du compteur…"></textarea>
-    <label>🔗 URL de contexte (article, fiche, lieu…)</label>
-    <input type="url" id="contextUrl" placeholder="https://…">
-    <label>📷 Photo (fichier ou galerie)</label>
-    <input type="file" id="photoFile" accept="image/*">
+  <main class="card" aria-labelledby="situationHeading">
+    <h2 id="situationHeading" class="hint" style="color:#7dd3fc;font-size:14px;margin-bottom:10px;font-weight:700;">Nouvelle situation</h2>
+    <label for="situationInput">📝 Description</label>
+    <textarea id="situationInput" rows="5" maxlength="8000" placeholder="Ex. : panneau inconnu, message suspect, bruit anormal…"></textarea>
+    <label for="contextUrl">🔗 URL de contexte (optionnel)</label>
+    <input type="url" id="contextUrl" inputmode="url" placeholder="https://…" autocomplete="url" maxlength="2048">
+    <label for="photoFile">📷 Photo</label>
+    <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp,image/heic,image/*">
+    <p class="hint">JPEG/PNG/WebP, max ~12 Mo. Redimensionnement auto avant envoi.</p>
     <div id="photoPreviewWrap" class="hidden">
-      <img id="photoPreview" class="thumb" alt="Aperçu">
+      <img id="photoPreview" class="thumb" width="400" height="300" alt="Aperçu de la photo sélectionnée">
       <div class="flex" style="margin-top:8px;">
         <button type="button" id="clearPhoto" class="btn-secondary btn-small">Retirer la photo</button>
       </div>
     </div>
     <div class="flex row-actions" style="margin-top:10px;">
-      <button type="button" id="btnCamera" class="btn-secondary">📸 Caméra</button>
-      <button type="button" id="btnDictation" class="btn-secondary">🎤 Dictée</button>
-      <button type="button" id="btnAudio5" class="btn-secondary">⏺️ Audio 5s</button>
+      <button type="button" id="btnCamera" class="btn-secondary" aria-label="Prendre une photo avec la caméra">📸 Caméra</button>
+      <button type="button" id="btnDictation" class="btn-secondary" aria-label="Dicter du texte">🎤 Dictée</button>
+      <button type="button" id="btnAudio5" class="btn-secondary" aria-label="Enregistrer 5 secondes d audio">⏺️ Audio 5s</button>
     </div>
-    <p id="dictationStatus" class="hint hidden"></p>
-    <button type="button" id="analyzeBtn" class="btn">🔎 Analyser la situation</button>
-  </div>
+    <p id="dictationStatus" class="hint hidden" role="status" aria-live="polite"></p>
+    <button type="button" id="analyzeBtn" class="btn" aria-busy="false">🔎 Analyser la situation</button>
+    <p class="hint">Raccourci : <span class="kbd">Ctrl</span> + <span class="kbd">Entrée</span> pour lancer l’analyse.</p>
+  </main>
 
-  <!-- Résultat -->
-  <div id="resultCard" class="card hidden">
-    <label>✅ Analyse</label>
-    <div id="urgencePill" class="urgence-pill vert">—</div>
+  <section id="resultCard" class="card hidden" aria-live="polite" aria-atomic="true">
+    <h2 class="hint" style="color:#7dd3fc;font-size:14px;margin-bottom:4px;font-weight:700;">Résultat</h2>
+    <div id="urgencePill" class="urgence-pill vert" role="status">—</div>
     <div id="resultBox" class="message-box vert"></div>
     <div class="flex" style="margin-top:10px;">
       <button type="button" id="copyResult" class="btn-secondary btn-small">📋 Copier le résumé</button>
     </div>
-  </div>
+  </section>
 
-  <!-- Historique local -->
-  <div class="card">
+  <section class="card" aria-labelledby="histHeading">
     <div class="flex" style="justify-content:space-between; align-items:center;">
-      <label style="margin:0;">📚 Historique (ce téléphone)</label>
-      <button type="button" id="clearHistory" class="btn-secondary btn-small">Effacer</button>
+      <h2 id="histHeading" style="margin:0;font-size:14px;font-weight:700;color:#7dd3fc;">📚 Historique</h2>
+      <button type="button" id="clearHistory" class="btn-secondary btn-small">Tout effacer</button>
     </div>
-    <p class="hint">Stocké dans le navigateur uniquement.</p>
-    <div id="historyList"></div>
-  </div>
+    <p class="hint">Stockage local uniquement. Touche une ligne pour recharger le texte.</p>
+    <div id="historyList" role="list"></div>
+  </section>
 </div>
 
 <script>
+  const MAX_SITUATION_CHARS = 8000;
+  const MAX_IMAGE_FILE_BYTES = 12 * 1024 * 1024;
+  const MAX_IMAGE_EDGE = 1600;
+  const MAX_MARKDOWN_CONTEXT = 12000;
+  const VISION_MODEL_FALLBACK = 'google/gemini-2.0-flash-001';
+  const VISION_MODEL_REGEX = /gemini|gpt-4o|claude-3|claude-sonnet|vision|qwen.*vl|llava|moondream/i;
+
   const SYSTEM_INTERPRET = `Tu es un assistant d'interprétation de situation immédiate (sécurité, prudence, orientation).
 Règles strictes :
 1. Ne donne jamais d'instructions illégales ou dangereuses.
-2. Ne remplace jamais un avis médical, juridique, ni les services de secours. Pour une urgence vitale : oriente vers le 112 (Europe) ou les numéros locaux.
-3. Ne prescrit jamais de médicament, dose, posologie, ni diagnostic médical. Pour santé/médicaments : conseille de consulter un professionnel de santé ou un pharmacien.
+2. Ne remplace jamais un avis médical, juridique, ni les services de secours. Urgence vitale : oriente vers le 112 (Europe) ou les numéros locaux.
+3. Ne prescrit jamais de médicament, dose, posologie, ni diagnostic médical. Pour la santé : oriente vers un professionnel de santé ou un pharmacien.
 4. Ne prends pas de décisions financières à la place de l'utilisateur (pas de virement, pas de partage de codes).
-5. Si tu manques d'informations fiables, dis-le clairement et propose quoi observer / quelle question poser à un humain compétent.
-6. Reste factuel, prudent, et légal. Priorise la sécurité physique.
+5. Si tu manques d'informations fiables, dis-le clairement et propose quoi observer ou quelle question poser à un humain compétent.
+6. Reste factuel, prudent et légal. Priorise la sécurité physique.
 
-Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
-{"urgence":"vert|orange|rouge","action_principale":"une phrase courte","conseils":["conseil 1","conseil 2","conseil 3"],"rappel_secours":"phrase courte si pertinent, sinon ""}
-- urgence : vert = peu urgent / information ; orange = prudence / vérifications ; rouge = danger possible immédiat (orienter vers mise en sécurité et secours si nécessaire).
-- conseils : maximum 3 chaînes, concrètes et réalisables.`;
+Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) avec exactement ces clés :
+{"urgence":"vert|orange|rouge","action_principale":"une phrase courte","conseils":["conseil 1","conseil 2","conseil 3"],"rappel_secours":"texte court ou chaîne vide"}
+- urgence : vert = information / faible risque ; orange = prudence ou vérifications ; rouge = danger possible immédiat (mise en sécurité, secours si nécessaire).
+- conseils : au plus 3 chaînes, concrètes et réalisables.`;
 
-  let apiKey = localStorage.getItem('apiKey') || '';
-  let firecrawlKey = localStorage.getItem('firecrawlKey') || '';
-  let firecrawlBase = localStorage.getItem('firecrawlBase') || 'https://api.firecrawl.dev';
+  let apiKey = '';
+  let firecrawlKey = '';
+  let firecrawlBase = 'https://api.firecrawl.dev';
   let history = [];
   let currentImageDataUrl = null;
   let lastResultText = '';
+  let analyzeInFlight = false;
+  let audioRecording = false;
+  let activeDictation = null;
 
   function stripJsonFence(text) {
     const t = String(text || '').trim();
@@ -145,35 +175,81 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     return m ? m[1].trim() : t;
   }
 
+  function extractFirstJsonObject(text) {
+    const s = String(text || '');
+    const start = s.indexOf('{');
+    if (start === -1) return null;
+    let depth = 0;
+    let inStr = false;
+    let esc = false;
+    for (let i = start; i < s.length; i++) {
+      const c = s[i];
+      if (inStr) {
+        if (esc) { esc = false; continue; }
+        if (c === '\\') { esc = true; continue; }
+        if (c === '"') inStr = false;
+        continue;
+      }
+      if (c === '"') { inStr = true; continue; }
+      if (c === '{') depth++;
+      else if (c === '}') {
+        depth--;
+        if (depth === 0) return s.slice(start, i + 1);
+      }
+    }
+    return null;
+  }
+
   function escapeHtml(str) {
     return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]);
   }
 
-  function showToast(msg) {
+  function showToast(msg, isError) {
     const t = document.createElement('div');
-    t.className = 'toast';
+    t.className = 'toast' + (isError ? ' err' : '');
+    t.setAttribute('role', 'status');
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2400);
+    setTimeout(() => t.remove(), isError ? 4200 : 2600);
   }
 
   function updateApiStatus() {
-    document.getElementById('apiStatus').textContent = apiKey ? '✅ Clé OpenRouter enregistrée (localement).' : '⚠️ Ajoute une clé OpenRouter pour analyser.';
+    const el = document.getElementById('apiStatus');
+    el.textContent = apiKey ? '✅ Clé OpenRouter enregistrée sur cet appareil.' : '⚠️ Saisis une clé OpenRouter pour analyser ou transcrire.';
   }
 
   function saveHistory() {
-    localStorage.setItem('interpretHistory', JSON.stringify(history.slice(-40)));
+    try {
+      localStorage.setItem('interpretHistory', JSON.stringify(history.slice(-40)));
+    } catch (e) {
+      console.warn(e);
+      showToast('Stockage plein : historique non sauvegardé', true);
+    }
+  }
+
+  function safeParseHistory(raw) {
+    try {
+      const arr = JSON.parse(raw || '[]');
+      return Array.isArray(arr) ? arr.filter(h => h && typeof h === 'object') : [];
+    } catch {
+      return [];
+    }
   }
 
   function loadAll() {
     apiKey = localStorage.getItem('apiKey') || '';
     firecrawlKey = localStorage.getItem('firecrawlKey') || '';
     firecrawlBase = localStorage.getItem('firecrawlBase') || 'https://api.firecrawl.dev';
-    history = JSON.parse(localStorage.getItem('interpretHistory') || '[]');
+    history = safeParseHistory(localStorage.getItem('interpretHistory'));
     document.getElementById('apiKey').value = apiKey;
     document.getElementById('firecrawlKey').value = firecrawlKey;
     document.getElementById('firecrawlBase').value = firecrawlBase;
     document.getElementById('enrichToggle').checked = localStorage.getItem('enrichToggle') === '1';
+    const savedModel = localStorage.getItem('openrouterModel');
+    if (savedModel) {
+      const sel = document.getElementById('modelSelect');
+      if ([...sel.options].some(o => o.value === savedModel)) sel.value = savedModel;
+    }
     updateApiStatus();
     renderHistory();
   }
@@ -184,50 +260,103 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
       div.innerHTML = '<div class="hint">Aucune analyse enregistrée.</div>';
       return;
     }
-    let html = '';
-    [...history].reverse().slice(0, 15).forEach((h) => {
-      const u = escapeHtml(h.urgence || '?');
-      html += `<div class="hist-item"><strong>${u}</strong> · ${escapeHtml(h.action_principale || '')}<br><span class="hint">${escapeHtml(h.date || '')}</span></div>`;
+    const frag = document.createDocumentFragment();
+    [...history].reverse().slice(0, 20).forEach((h, idx) => {
+      const realIdx = history.length - 1 - idx;
+      const row = document.createElement('div');
+      row.className = 'hist-item';
+      row.setAttribute('role', 'listitem');
+      row.tabIndex = 0;
+      const when = h.date ? new Date(h.date).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }) : '';
+      row.innerHTML = `<strong>${escapeHtml(h.urgence || '?')}</strong> · ${escapeHtml(h.action_principale || '')}<br><span class="hint">${escapeHtml(when)}</span>`;
+      const restore = () => {
+        const ta = document.getElementById('situationInput');
+        const snippet = h.snippet || h.action_principale || '';
+        ta.value = snippet.slice(0, MAX_SITUATION_CHARS);
+        ta.focus();
+        showToast('Texte rechargé depuis l’historique');
+      };
+      row.addEventListener('click', restore);
+      row.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); restore(); }
+      });
+      row.dataset.index = String(realIdx);
+      frag.appendChild(row);
     });
-    div.innerHTML = html;
+    div.replaceChildren(frag);
   }
 
   function normalizeUrgence(u) {
     const x = String(u || '').toLowerCase();
-    if (x.includes('rouge') || x === 'red') return 'rouge';
-    if (x.includes('orange') || x === 'amber') return 'orange';
+    if (x.includes('rouge') || x === 'red' || x === 'critical') return 'rouge';
+    if (x.includes('orange') || x === 'amber' || x === 'warning') return 'orange';
     return 'vert';
   }
 
-  function buildUserPayload(inputText, imageDataUrl, enrichedMarkdown) {
-    let text = `Situation décrite par l'utilisateur :\n${inputText || '(aucun texte)'}\n`;
+  function buildUserPayload(inputText, contextUrl, imageDataUrl, enrichedMarkdown) {
+    let text = `Situation décrite par l'utilisateur :\n${inputText || '(aucun texte saisi)'}\n`;
+    if (contextUrl) {
+      text += `\nURL de contexte fournie : ${contextUrl}\n`;
+    }
     if (enrichedMarkdown) {
-      text += `\n--- Contexte page (extrait markdown, peut être incomplet) ---\n${enrichedMarkdown.slice(0, 12000)}\n`;
+      text += `\n--- Extrait page (markdown, peut être incomplet) ---\n${enrichedMarkdown.slice(0, MAX_MARKDOWN_CONTEXT)}\n`;
     }
     if (imageDataUrl) {
-      text += `\nUne image est fournie : décris ce qui est visible de façon prudente, puis intègre cela dans l'analyse JSON demandée.`;
+      text += `\nUne image est jointe : décris ce qui est visible avec prudence (incertitudes possibles), puis intègre dans le JSON demandé.`;
     }
-    text += `\nRéponds uniquement avec le JSON demandé dans les règles système.`;
+    text += `\nRéponds uniquement avec l'objet JSON demandé dans le message système.`;
     return text;
+  }
+
+  function firecrawlMarkdown(data) {
+    if (!data || typeof data !== 'object') return '';
+    const root = data.data !== undefined ? data.data : data;
+    const inner = root && typeof root === 'object' && root.data !== undefined ? root.data : root;
+    const candidates = [inner, root];
+    for (const o of candidates) {
+      if (o && typeof o === 'object') {
+        if (typeof o.markdown === 'string' && o.markdown) return o.markdown;
+        if (typeof o.md === 'string' && o.md) return o.md;
+      }
+    }
+    return '';
   }
 
   async function enrichWithFirecrawl(pageUrl) {
     const base = (document.getElementById('firecrawlBase').value || '').replace(/\/+$/, '');
     const key = (firecrawlKey || document.getElementById('firecrawlKey').value || '').trim();
     if (!key) throw new Error('Clé Firecrawl manquante');
+    let u;
+    try {
+      u = new URL(pageUrl);
+    } catch {
+      throw new Error('URL invalide');
+    }
+    if (u.protocol !== 'https:') throw new Error('Utilise une URL https');
     const res = await fetch(`${base}/v1/scrape`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        url: pageUrl,
+        url: u.href,
         formats: ['markdown'],
         onlyMainContent: true
       })
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || data.message || `HTTP ${res.status}`);
-    const md = (data.data && (data.data.markdown || data.data.md)) || data.markdown || '';
-    return typeof md === 'string' ? md : '';
+    if (!res.ok) {
+      const err = typeof data.error === 'string' ? data.error : (data.error?.message || data.message);
+      throw new Error(err || `HTTP ${res.status}`);
+    }
+    if (data.success === false) throw new Error(data.error || 'Firecrawl success:false');
+    return firecrawlMarkdown(data);
+  }
+
+  function openRouterErrorMessage(data, status) {
+    if (!data || typeof data !== 'object') return `OpenRouter HTTP ${status}`;
+    if (typeof data.error === 'string') return data.error;
+    if (data.error && typeof data.error.message === 'string') return data.error.message;
+    if (typeof data.message === 'string') return data.message;
+    return `OpenRouter HTTP ${status}`;
   }
 
   async function callOpenRouterChat(messages, model) {
@@ -236,7 +365,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
-        'HTTP-Referer': location.origin === 'null' ? 'https://localhost' : location.origin,
+        'HTTP-Referer': (typeof location !== 'undefined' && location.origin && location.origin !== 'null') ? location.origin : 'https://localhost',
         'X-Title': 'Interprete Instant'
       },
       body: JSON.stringify({
@@ -247,8 +376,12 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
       })
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error?.message || data.message || `OpenRouter ${res.status}`);
-    return data.choices?.[0]?.message?.content || '';
+    if (!res.ok) throw new Error(openRouterErrorMessage(data, res.status));
+    const content = data.choices?.[0]?.message?.content;
+    if (content == null || String(content).trim() === '') {
+      throw new Error('Réponse vide du modèle. Réessaie ou change de modèle.');
+    }
+    return String(content);
   }
 
   function buildMessages(userText, imageDataUrl) {
@@ -265,23 +398,30 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
   }
 
   function parseInterpretJson(raw) {
-    const cleaned = stripJsonFence(raw);
-    try {
-      const o = JSON.parse(cleaned);
-      return {
-        urgence: normalizeUrgence(o.urgence),
-        action_principale: String(o.action_principale || '').trim(),
-        conseils: Array.isArray(o.conseils) ? o.conseils.slice(0, 3).map(String) : [],
-        rappel_secours: String(o.rappel_secours || '').trim()
-      };
-    } catch {
+    const fenced = stripJsonFence(raw).trim();
+    const tryParse = (s) => {
+      if (!s) return null;
+      try { return JSON.parse(s); } catch { return null; }
+    };
+    const extracted = tryParse(fenced)
+      || tryParse(extractFirstJsonObject(fenced))
+      || tryParse(extractFirstJsonObject(String(raw || '')));
+    if (!extracted || typeof extracted !== 'object') {
+      const fallback = fenced.slice(0, 500) + (fenced.length > 500 ? '…' : '');
       return {
         urgence: 'orange',
-        action_principale: 'Réponse non structurée. Vérifie les faits avec une source fiable.',
-        conseils: [String(cleaned).slice(0, 400)],
+        action_principale: 'Impossible de lire la réponse structurée. Vérifie les faits auprès d’une source fiable.',
+        conseils: fallback ? [fallback] : ['Réessaie ou change de modèle.'],
         rappel_secours: ''
       };
     }
+    const o = extracted;
+    return {
+      urgence: normalizeUrgence(o.urgence),
+      action_principale: String(o.action_principale || '').trim(),
+      conseils: Array.isArray(o.conseils) ? o.conseils.slice(0, 3).map(x => String(x).trim()).filter(Boolean) : [],
+      rappel_secours: String(o.rappel_secours || '').trim()
+    };
   }
 
   function displayResult(parsed) {
@@ -294,7 +434,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
 
     box.className = 'message-box ' + (u === 'rouge' ? 'rouge' : u === 'orange' ? 'orange' : 'vert');
     const lines = [];
-    lines.push('▶ Action recommandée : ' + parsed.action_principale);
+    lines.push('▶ Action recommandée : ' + (parsed.action_principale || '—'));
     if (parsed.conseils.length) {
       lines.push('');
       parsed.conseils.forEach((c, i) => lines.push(`${i + 1}. ${c}`));
@@ -306,28 +446,54 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     lastResultText = lines.join('\n');
     box.textContent = lastResultText;
     card.classList.remove('hidden');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function downscaleDataUrl(dataUrl, maxEdge) {
+    return new Promise((resolve) => {
+      if (!dataUrl || !dataUrl.startsWith('data:image')) { resolve(dataUrl); return; }
+      const im = new Image();
+      im.onload = () => {
+        let w = im.naturalWidth || im.width;
+        let h = im.naturalHeight || im.height;
+        if (!w || !h) { resolve(dataUrl); return; }
+        if (w <= maxEdge && h <= maxEdge) { resolve(dataUrl); return; }
+        const scale = maxEdge / Math.max(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+        const c = document.createElement('canvas');
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(im, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', 0.82));
+      };
+      im.onerror = () => resolve(dataUrl);
+      im.src = dataUrl;
+    });
   }
 
   async function captureFromCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
-      showToast('Caméra non disponible sur ce navigateur');
+      showToast('Caméra non disponible', true);
       return;
     }
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' } },
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } },
       audio: false
     });
     const video = document.createElement('video');
     video.playsInline = true;
     video.muted = true;
+    video.setAttribute('playsinline', '');
     video.srcObject = stream;
-    await video.play();
-    await new Promise(r => setTimeout(r, 200));
+    await video.play().catch(() => {});
+    await new Promise(r => setTimeout(r, 350));
     const w = video.videoWidth;
     const h = video.videoHeight;
     if (!w || !h) {
       stream.getTracks().forEach(t => t.stop());
-      showToast('Flux vidéo invalide');
+      showToast('Flux vidéo invalide', true);
       return;
     }
     const canvas = document.createElement('canvas');
@@ -335,7 +501,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     canvas.height = h;
     canvas.getContext('2d').drawImage(video, 0, 0);
     stream.getTracks().forEach(t => t.stop());
-    currentImageDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+    currentImageDataUrl = await downscaleDataUrl(canvas.toDataURL('image/jpeg', 0.85), MAX_IMAGE_EDGE);
     showPhotoPreview();
     showToast('Photo capturée');
   }
@@ -352,36 +518,80 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     }
   }
 
-  let mediaRecorder = null;
-  let audioChunks = [];
-
-  async function recordAudio5s() {
-    if (!navigator.mediaDevices?.getUserMedia) {
-      showToast('Micro non disponible');
-      return;
-    }
-    showToast('Enregistrement 5 secondes…');
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioChunks = [];
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.ondataavailable = e => { if (e.data.size) audioChunks.push(e.data); };
-    mediaRecorder.start();
-    await new Promise(r => setTimeout(r, 5000));
-    mediaRecorder.stop();
-    await new Promise((resolve) => { mediaRecorder.onstop = resolve; });
-    stream.getTracks().forEach(t => t.stop());
-    const blob = new Blob(audioChunks, { type: audioChunks[0]?.type || 'audio/webm' });
-    await transcribeAndAppend(blob);
+  function pickAudioMimeType() {
+    if (typeof MediaRecorder === 'undefined') return '';
+    const types = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/mp4;codecs=mp4a.40.2'];
+    return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
   }
 
-  async function transcribeAndAppend(blob) {
+  function audioFilename(mime) {
+    if (mime.includes('mp4')) return 'clip.m4a';
+    return 'clip.webm';
+  }
+
+  async function recordAudio5s() {
+    if (audioRecording) {
+      showToast('Déjà en cours…', true);
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      showToast('Micro non disponible', true);
+      return;
+    }
+    audioRecording = true;
+    const btn = document.getElementById('btnAudio5');
+    const prev = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '⏺️ …';
+    showToast('Enregistrement 5 secondes…');
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true }
+      });
+    } catch (e) {
+      audioRecording = false;
+      btn.disabled = false;
+      btn.textContent = prev;
+      showToast('Micro refusé ou indisponible', true);
+      return;
+    }
+    const mime = pickAudioMimeType();
+    const chunks = [];
+    let rec;
+    try {
+      rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+    } catch {
+      rec = new MediaRecorder(stream);
+    }
+    rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+    const done = new Promise((resolve) => { rec.onstop = () => resolve(); });
+    rec.start(400);
+    await new Promise(r => setTimeout(r, 5000));
+    if (rec.state !== 'inactive') rec.stop();
+    await done;
+    stream.getTracks().forEach(t => t.stop());
+    const blobType = rec.mimeType || mime || 'audio/webm';
+    const blob = new Blob(chunks, { type: blobType });
+    audioRecording = false;
+    btn.disabled = false;
+    btn.textContent = prev;
+    if (!blob.size) {
+      showToast('Aucun son capturé', true);
+      return;
+    }
+    await transcribeAndAppend(blob, blobType);
+  }
+
+  async function transcribeAndAppend(blob, blobType) {
     if (!apiKey) {
-      showToast('Clé OpenRouter requise pour la transcription');
+      showToast('Clé OpenRouter requise pour la transcription', true);
       return;
     }
     const fd = new FormData();
     fd.append('model', 'openai/whisper-large-v3');
-    fd.append('file', blob, 'clip.webm');
+    const fname = audioFilename(blobType || blob.type || '');
+    fd.append('file', blob, fname);
     try {
       const res = await fetch('https://openrouter.ai/api/v1/audio/transcriptions', {
         method: 'POST',
@@ -389,16 +599,16 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
         body: fd
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error?.message || data.message || `HTTP ${res.status}`);
+      if (!res.ok) throw new Error(openRouterErrorMessage(data, res.status));
       const text = data.text || data.transcript || '';
       if (!text) throw new Error('Transcription vide');
       const ta = document.getElementById('situationInput');
       const prefix = ta.value.trim() ? ta.value.trim() + '\n\n' : '';
-      ta.value = prefix + '[Transcription audio] ' + text;
-      showToast('Audio transcrit dans le texte');
+      ta.value = (prefix + '[Transcription audio] ' + text).slice(0, MAX_SITUATION_CHARS);
+      showToast('Audio transcrit');
     } catch (e) {
       console.warn(e);
-      showToast('Transcription impossible : décris le son à la main ou utilise la dictée.');
+      showToast(e.message || 'Transcription impossible (essaie la dictée ou décris le son).', true);
     }
   }
 
@@ -406,39 +616,74 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const status = document.getElementById('dictationStatus');
     if (!SR) {
-      showToast('Dictée non supportée (essayez Chrome / Android)');
+      showToast('Dictée non supportée (essaie Chrome / Android)', true);
       return;
+    }
+    if (activeDictation) {
+      try { activeDictation.stop(); } catch (e) { /* ignore */ }
+      activeDictation = null;
     }
     const rec = new SR();
     rec.lang = 'fr-FR';
     rec.interimResults = false;
     rec.maxAlternatives = 1;
+    activeDictation = rec;
     status.classList.remove('hidden');
     status.textContent = 'Écoute… parle maintenant.';
     rec.onresult = (ev) => {
       const t = ev.results[0][0].transcript;
       const ta = document.getElementById('situationInput');
-      ta.value = (ta.value.trim() ? ta.value.trim() + '\n\n' : '') + t;
+      ta.value = ((ta.value.trim() ? ta.value.trim() + '\n\n' : '') + t).slice(0, MAX_SITUATION_CHARS);
       status.textContent = 'Dictée terminée.';
       showToast('Texte ajouté');
     };
-    rec.onerror = () => {
-      status.textContent = 'Erreur dictée.';
-      showToast('Dictée interrompue');
+    rec.onerror = (ev) => {
+      status.textContent = 'Erreur dictée : ' + (ev.error || 'inconnue');
+      showToast('Dictée interrompue', true);
     };
-    rec.onend = () => setTimeout(() => status.classList.add('hidden'), 2000);
-    rec.start();
+    rec.onend = () => {
+      activeDictation = null;
+      setTimeout(() => status.classList.add('hidden'), 2200);
+    };
+    try {
+      rec.start();
+    } catch (e) {
+      activeDictation = null;
+      showToast('Impossible de démarrer la dictée', true);
+    }
+  }
+
+  function setAnalyzeLoading(on) {
+    analyzeInFlight = on;
+    const btn = document.getElementById('analyzeBtn');
+    btn.disabled = on;
+    btn.setAttribute('aria-busy', on ? 'true' : 'false');
+    btn.textContent = on ? '⏳ Analyse en cours…' : '🔎 Analyser la situation';
   }
 
   async function interpretSituation() {
+    if (analyzeInFlight) return;
     const input = document.getElementById('situationInput').value.trim();
     const url = document.getElementById('contextUrl').value.trim();
-    if (!input && !currentImageDataUrl && !url) {
-      showToast('Ajoute du texte, une URL ou une photo');
+    const hasText = !!input;
+    const hasImg = !!currentImageDataUrl;
+    let hasUrl = false;
+    if (url) {
+      try {
+        const u = new URL(url);
+        hasUrl = u.protocol === 'https:' || u.protocol === 'http:';
+      } catch { /* ignore */ }
+    }
+    if (!hasText && !hasImg && !hasUrl) {
+      showToast('Ajoute du texte, une URL ou une photo', true);
       return;
     }
     if (!apiKey) {
-      showToast('Clé OpenRouter manquante');
+      showToast('Clé OpenRouter manquante', true);
+      return;
+    }
+    if (!navigator.onLine) {
+      showToast('Pas de connexion réseau', true);
       return;
     }
 
@@ -446,24 +691,22 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     const enrichOn = document.getElementById('enrichToggle').checked;
     if (enrichOn && url && /^https:\/\//i.test(url)) {
       try {
-        showToast('Enrichissement en cours…');
+        showToast('Enrichissement Firecrawl…');
         enriched = await enrichWithFirecrawl(url);
-        if (!enriched) showToast('Enrichissement vide (vérifie l’URL ou la clé)');
+        if (!enriched) showToast('Enrichissement vide (URL ou clé)', true);
       } catch (e) {
         console.warn(e);
-        showToast('Enrichissement indisponible (CORS, clé ou quota)');
+        showToast('Firecrawl : ' + (e.message || 'indisponible'), true);
       }
     }
 
-    const userPayload = buildUserPayload(input, currentImageDataUrl, enriched);
+    const userPayload = buildUserPayload(input, url, currentImageDataUrl, enriched);
     const model = document.getElementById('modelSelect').value;
-    const useVisionModel = !!currentImageDataUrl;
-    const modelFinal = useVisionModel && !/gemini|gpt-4o|claude-3|vision/i.test(model)
-      ? 'google/gemini-2.0-flash-001'
-      : model;
+    const useVision = !!currentImageDataUrl;
+    const modelFinal = useVision && !VISION_MODEL_REGEX.test(model) ? VISION_MODEL_FALLBACK : model;
 
+    setAnalyzeLoading(true);
     try {
-      showToast('Analyse en cours…');
       const messages = buildMessages(userPayload, currentImageDataUrl);
       const raw = await callOpenRouterChat(messages, modelFinal);
       const parsed = parseInterpretJson(raw);
@@ -473,24 +716,35 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
         urgence: parsed.urgence,
         action_principale: parsed.action_principale,
         conseils: parsed.conseils,
-        snippet: (input || url || 'image').slice(0, 120)
+        snippet: (input || url || (hasImg ? 'photo' : '')).slice(0, 200)
       });
       saveHistory();
       renderHistory();
     } catch (e) {
       console.warn(e);
-      showToast(e.message || 'Erreur réseau / API');
+      showToast(e.message || 'Erreur réseau / API', true);
+    } finally {
+      setAnalyzeLoading(false);
     }
   }
 
   document.getElementById('photoFile').addEventListener('change', (e) => {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
+    if (f.size > MAX_IMAGE_FILE_BYTES) {
+      showToast('Image trop lourde (max ~12 Mo)', true);
+      e.target.value = '';
+      return;
+    }
     const r = new FileReader();
-    r.onload = () => {
-      currentImageDataUrl = typeof r.result === 'string' ? r.result : null;
+    r.onload = async () => {
+      let dataUrl = typeof r.result === 'string' ? r.result : null;
+      if (!dataUrl) return;
+      dataUrl = await downscaleDataUrl(dataUrl, MAX_IMAGE_EDGE);
+      currentImageDataUrl = dataUrl;
       showPhotoPreview();
     };
+    r.onerror = () => showToast('Lecture fichier impossible', true);
     r.readAsDataURL(f);
   });
 
@@ -501,20 +755,46 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
   });
 
   document.getElementById('btnCamera').addEventListener('click', () => {
-    captureFromCamera().catch(() => showToast('Caméra refusée ou indisponible'));
+    if (analyzeInFlight || audioRecording) return;
+    captureFromCamera().catch((e) => {
+      console.warn(e);
+      showToast('Caméra refusée ou indisponible', true);
+    });
   });
   document.getElementById('btnDictation').addEventListener('click', startDictation);
   document.getElementById('btnAudio5').addEventListener('click', () => {
-    recordAudio5s().catch(() => showToast('Micro refusé ou erreur audio'));
+    recordAudio5s().catch((e) => {
+      console.warn(e);
+      showToast('Erreur audio', true);
+    });
   });
 
   document.getElementById('analyzeBtn').addEventListener('click', interpretSituation);
+
+  document.getElementById('situationInput').addEventListener('keydown', (ev) => {
+    if (ev.ctrlKey && ev.key === 'Enter') {
+      ev.preventDefault();
+      interpretSituation();
+    }
+  });
 
   document.getElementById('saveKey').addEventListener('click', () => {
     apiKey = document.getElementById('apiKey').value.trim();
     if (apiKey) localStorage.setItem('apiKey', apiKey);
     updateApiStatus();
-    showToast('Clé OpenRouter sauvegardée');
+    showToast(apiKey ? 'Clé OpenRouter sauvegardée' : 'Clé effacée du champ (non enregistrée)');
+  });
+
+  document.getElementById('clearKey').addEventListener('click', () => {
+    apiKey = '';
+    localStorage.removeItem('apiKey');
+    document.getElementById('apiKey').value = '';
+    updateApiStatus();
+    showToast('Clé OpenRouter retirée du navigateur');
+  });
+
+  document.getElementById('modelSelect').addEventListener('change', () => {
+    localStorage.setItem('openrouterModel', document.getElementById('modelSelect').value);
   });
 
   document.getElementById('saveFirecrawl').addEventListener('click', () => {
@@ -530,12 +810,19 @@ Réponds UNIQUEMENT en JSON valide (sans markdown) avec cette forme exacte :
     localStorage.setItem('enrichToggle', document.getElementById('enrichToggle').checked ? '1' : '0');
   });
 
-  document.getElementById('copyResult').addEventListener('click', () => {
+  document.getElementById('copyResult').addEventListener('click', async () => {
     if (!lastResultText) return;
-    navigator.clipboard.writeText(lastResultText).then(() => showToast('Copié')).catch(() => showToast('Copie impossible'));
+    try {
+      await navigator.clipboard.writeText(lastResultText);
+      showToast('Copié');
+    } catch {
+      showToast('Copie impossible (permissions navigateur)', true);
+    }
   });
 
   document.getElementById('clearHistory').addEventListener('click', () => {
+    if (!history.length) return;
+    if (!confirm('Effacer tout l’historique sur cet appareil ?')) return;
     history = [];
     saveHistory();
     renderHistory();
