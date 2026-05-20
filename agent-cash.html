@@ -260,27 +260,29 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]);
   }
 
-  function showToast(msg, kind) {
-    let variant = 'info';
-    if (kind === true || kind === 'error') variant = 'error';
-    else if (kind === 'success') variant = 'success';
-    else if (kind === 'warning') variant = 'warning';
+  function showToast(message, type = 'info', duration) {
+    if (type === true) type = 'error';
+    const allowed = ['info', 'error', 'success', 'warning'];
+    if (!allowed.includes(type)) type = 'info';
 
-    const t = document.createElement('div');
-    t.className = 'toast';
-    if (variant !== 'info') t.classList.add(variant);
-    t.setAttribute('role', 'status');
-    t.setAttribute('aria-live', variant === 'error' ? 'assertive' : 'polite');
-    t.textContent = msg;
-    document.body.appendChild(t);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => t.classList.add('show'));
-    });
-    const duration = variant === 'error' ? 4200 : variant === 'warning' ? 3400 : 2800;
+    document.querySelectorAll('.toast').forEach(el => el.remove());
+
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    toast.offsetHeight;
+    toast.classList.add('show');
+
+    const hideAfter = duration != null ? duration : (type === 'error' ? 4200 : type === 'warning' ? 3500 : type === 'success' ? 3200 : 3000);
+
     setTimeout(() => {
-      t.classList.remove('show');
-      setTimeout(() => t.remove(), 320);
-    }, duration);
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 400);
+    }, hideAfter);
   }
 
   function updateApiStatus() {
@@ -293,7 +295,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       localStorage.setItem('interpretHistory', JSON.stringify(history.slice(-40)));
     } catch (e) {
       console.warn(e);
-      showToast('Stockage plein : historique non sauvegardé', true);
+      showToast('Stockage plein : historique non sauvegardé', 'error');
     }
   }
 
@@ -545,7 +547,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
 
   async function captureFromCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
-      showToast('Caméra non disponible', true);
+      showToast('Caméra non disponible', 'error');
       return;
     }
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -563,7 +565,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     const h = video.videoHeight;
     if (!w || !h) {
       stream.getTracks().forEach(t => t.stop());
-      showToast('Flux vidéo invalide', true);
+      showToast('Flux vidéo invalide', 'error');
       return;
     }
     const canvas = document.createElement('canvas');
@@ -601,11 +603,11 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
 
   async function recordAudio5s() {
     if (audioRecording) {
-      showToast('Déjà en cours…', true);
+      showToast('Déjà en cours…', 'error');
       return;
     }
     if (!navigator.mediaDevices?.getUserMedia) {
-      showToast('Micro non disponible', true);
+      showToast('Micro non disponible', 'error');
       return;
     }
     audioRecording = true;
@@ -623,7 +625,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       audioRecording = false;
       btn.disabled = false;
       btn.textContent = prev;
-      showToast('Micro refusé ou indisponible', true);
+      showToast('Micro refusé ou indisponible', 'error');
       return;
     }
     const mime = pickAudioMimeType();
@@ -647,7 +649,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     btn.disabled = false;
     btn.textContent = prev;
     if (!blob.size) {
-      showToast('Aucun son capturé', true);
+      showToast('Aucun son capturé', 'error');
       return;
     }
     await transcribeAndAppend(blob, blobType);
@@ -655,7 +657,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
 
   async function transcribeAndAppend(blob, blobType) {
     if (!apiKey) {
-      showToast('Clé OpenRouter requise pour la transcription', true);
+      showToast('Clé OpenRouter requise pour la transcription', 'error');
       return;
     }
     const fd = new FormData();
@@ -678,7 +680,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       showToast('Audio transcrit', 'success');
     } catch (e) {
       console.warn(e);
-      showToast(e.message || 'Transcription impossible (essaie la dictée ou décris le son).', true);
+      showToast(e.message || 'Transcription impossible (essaie la dictée ou décris le son).', 'error');
     }
   }
 
@@ -686,7 +688,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const status = document.getElementById('dictationStatus');
     if (!SR) {
-      showToast('Dictée non supportée (essaie Chrome / Android)', true);
+      showToast('Dictée non supportée (essaie Chrome / Android)', 'error');
       return;
     }
     if (activeDictation) {
@@ -709,7 +711,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     };
     rec.onerror = (ev) => {
       status.textContent = 'Erreur dictée : ' + (ev.error || 'inconnue');
-      showToast('Dictée interrompue', true);
+      showToast('Dictée interrompue', 'error');
     };
     rec.onend = () => {
       activeDictation = null;
@@ -719,7 +721,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       rec.start();
     } catch (e) {
       activeDictation = null;
-      showToast('Impossible de démarrer la dictée', true);
+      showToast('Impossible de démarrer la dictée', 'error');
     }
   }
 
@@ -745,15 +747,15 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       } catch { /* ignore */ }
     }
     if (!hasText && !hasImg && !hasUrl) {
-      showToast('Ajoute du texte, une URL ou une photo', true);
+      showToast('Ajoute du texte, une URL ou une photo', 'error');
       return;
     }
     if (!apiKey) {
-      showToast('Clé OpenRouter manquante', true);
+      showToast('Clé OpenRouter manquante', 'error');
       return;
     }
     if (!navigator.onLine) {
-      showToast('Pas de connexion réseau', true);
+      showToast('Pas de connexion réseau', 'error');
       return;
     }
 
@@ -766,7 +768,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
         if (!enriched) showToast('Enrichissement vide (URL ou clé)', 'warning');
       } catch (e) {
         console.warn(e);
-        showToast('Firecrawl : ' + (e.message || 'indisponible'), true);
+        showToast('Firecrawl : ' + (e.message || 'indisponible'), 'error');
       }
     }
 
@@ -781,6 +783,9 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       const raw = await callOpenRouterChat(messages, modelFinal);
       const parsed = parseInterpretJson(raw);
       displayResult(parsed);
+      if (parsed.urgence === 'rouge') {
+        showToast('Niveau rouge : lis l’analyse ci-dessus. Danger immédiat → 112.', 'error', 8000);
+      }
       history.push({
         date: new Date().toISOString(),
         urgence: parsed.urgence,
@@ -792,7 +797,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       renderHistory();
     } catch (e) {
       console.warn(e);
-      showToast(e.message || 'Erreur réseau / API', true);
+      showToast(e.message || 'Erreur réseau / API', 'error');
     } finally {
       setAnalyzeLoading(false);
     }
@@ -802,7 +807,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     const f = e.target.files && e.target.files[0];
     if (!f) return;
     if (f.size > MAX_IMAGE_FILE_BYTES) {
-      showToast('Image trop lourde (max ~12 Mo)', true);
+      showToast('Image trop lourde (max ~12 Mo)', 'error');
       e.target.value = '';
       return;
     }
@@ -814,7 +819,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       currentImageDataUrl = dataUrl;
       showPhotoPreview();
     };
-    r.onerror = () => showToast('Lecture fichier impossible', true);
+    r.onerror = () => showToast('Lecture fichier impossible', 'error');
     r.readAsDataURL(f);
   });
 
@@ -828,14 +833,14 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
     if (analyzeInFlight || audioRecording) return;
     captureFromCamera().catch((e) => {
       console.warn(e);
-      showToast('Caméra refusée ou indisponible', true);
+      showToast('Caméra refusée ou indisponible', 'error');
     });
   });
   document.getElementById('btnDictation').addEventListener('click', startDictation);
   document.getElementById('btnAudio5').addEventListener('click', () => {
     recordAudio5s().catch((e) => {
       console.warn(e);
-      showToast('Erreur audio', true);
+      showToast('Erreur audio', 'error');
     });
   });
 
@@ -887,7 +892,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans texte avant ou après) a
       await navigator.clipboard.writeText(lastResultText);
       showToast('Copié', 'success');
     } catch {
-      showToast('Copie impossible (permissions navigateur)', true);
+      showToast('Copie impossible (permissions navigateur)', 'error');
     }
   });
 
