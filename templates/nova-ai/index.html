@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova — AI that ships for you</title>
+  <meta name="description" content="Nova is the AI copilot that turns prompts into production. Join the waitlist." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2300e0c6'/%3E%3Cstop offset='1' stop-color='%237c5cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top"><span class="mark"></span> Nova</a>
+      <nav class="links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-primary" href="#waitlist">Get early access</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero wrap">
+      <span class="pill"><span class="ping"></span> Now in private beta</span>
+      <h1>The AI copilot that turns <span class="grad">prompts into production</span>.</h1>
+      <p class="lead">Nova writes, reviews and ships code while you sleep. Describe the outcome — it handles the rest, end to end.</p>
+      <form class="waitlist" data-form>
+        <input type="email" required placeholder="you@company.com" aria-label="Email" />
+        <button class="btn btn-primary" type="submit">Join waitlist</button>
+      </form>
+      <p class="micro">Join 4,200+ builders on the list · No spam, ever</p>
+
+      <div class="terminal" aria-hidden="true">
+        <div class="tbar"><i></i><i></i><i></i><span>nova · session</span></div>
+        <pre><code><span class="c-dim">$</span> nova build "add Stripe checkout"
+<span class="c-ok">✓</span> Analyzing repo… <span class="c-dim">14 files</span>
+<span class="c-ok">✓</span> Writing <span class="c-key">checkout.ts</span>, <span class="c-key">webhook.ts</span>
+<span class="c-ok">✓</span> Tests passing <span class="c-dim">(12/12)</span>
+<span class="c-ok">✓</span> PR opened <span class="c-link">#128</span> — ready to merge
+<span class="cursor">▍</span></code></pre>
+      </div>
+    </section>
+
+    <!-- LOGOS -->
+    <section class="wrap logos">
+      <p>Trusted by teams at</p>
+      <div><span>Vertex</span><span>Loop</span><span>Kaido</span><span>Pulse</span><span>Móda</span></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="wrap">
+      <div class="head">
+        <span class="eyebrow">Capabilities</span>
+        <h2>An agent that actually finishes the job</h2>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="ic">⚡</div><h3>Ships end to end</h3>
+          <p>From prompt to pull request. Nova plans, writes, tests and opens the PR for review.</p>
+        </article>
+        <article class="card">
+          <div class="ic">🧠</div><h3>Context-aware</h3>
+          <p>Reads your whole codebase and conventions, so the output matches your style — not a generic snippet.</p>
+        </article>
+        <article class="card">
+          <div class="ic">🔒</div><h3>Private by default</h3>
+          <p>Your code never trains a model. Bring your own keys and self-host if you want.</p>
+        </article>
+        <article class="card">
+          <div class="ic">🔁</div><h3>Self-correcting</h3>
+          <p>Runs the tests, reads the errors, fixes itself — looping until green.</p>
+        </article>
+        <article class="card">
+          <div class="ic">🔌</div><h3>Plugs into your stack</h3>
+          <p>GitHub, GitLab, Slack, Linear. Nova lives where your team already works.</p>
+        </article>
+        <article class="card">
+          <div class="ic">📊</div><h3>Full transparency</h3>
+          <p>Every action is logged and reversible. You stay in control of every merge.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- HOW -->
+    <section id="how" class="wrap">
+      <div class="head">
+        <span class="eyebrow">How it works</span>
+        <h2>Three steps from idea to shipped</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h3>Describe</h3><p>Tell Nova the outcome you want in plain language.</p></div>
+        <div class="step"><span class="n">2</span><h3>Review</h3><p>Nova drafts the change and opens a PR with tests.</p></div>
+        <div class="step"><span class="n">3</span><h3>Ship</h3><p>Approve and merge. You keep the final say, always.</p></div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="wrap">
+      <div class="head">
+        <span class="eyebrow">Pricing</span>
+        <h2>Start free, scale when you ship</h2>
+      </div>
+      <div class="grid-3 plans">
+        <div class="card plan">
+          <h3>Hobby</h3><div class="amt">$0<span>/mo</span></div>
+          <ul><li>50 tasks / month</li><li>1 repository</li><li>Community support</li></ul>
+          <a class="btn btn-ghost" href="#waitlist">Start free</a>
+        </div>
+        <div class="card plan feat">
+          <span class="tag">Popular</span>
+          <h3>Pro</h3><div class="amt">$29<span>/mo</span></div>
+          <ul><li>Unlimited tasks</li><li>Unlimited repos</li><li>Priority queue</li><li>Slack & Linear</li></ul>
+          <a class="btn btn-primary" href="#waitlist">Get Pro</a>
+        </div>
+        <div class="card plan">
+          <h3>Team</h3><div class="amt">$99<span>/mo</span></div>
+          <ul><li>Everything in Pro</li><li>Up to 10 seats</li><li>Self-host option</li><li>SSO</li></ul>
+          <a class="btn btn-ghost" href="#waitlist">Contact us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="wrap">
+      <div class="head"><span class="eyebrow">FAQ</span><h2>Good questions</h2></div>
+      <div class="faq">
+        <details open><summary>Does Nova train on my code?</summary><p>Never. Your code stays yours, and you can bring your own model keys or self-host.</p></details>
+        <details><summary>Which languages are supported?</summary><p>All major languages and frameworks. Nova adapts to the conventions it finds in your repo.</p></details>
+        <details><summary>Can I review before anything merges?</summary><p>Yes. Nova opens a pull request — nothing merges without your approval.</p></details>
+        <details><summary>When does early access open?</summary><p>We onboard new teams from the waitlist every week. Join to get your invite.</p></details>
+      </div>
+    </section>
+
+    <!-- WAITLIST CTA -->
+    <section id="waitlist" class="wrap">
+      <div class="cta">
+        <h2>Ship your next feature with Nova</h2>
+        <p>Join the waitlist and get early access plus launch pricing.</p>
+        <form class="waitlist" data-form>
+          <input type="email" required placeholder="you@company.com" aria-label="Email" />
+          <button class="btn btn-primary" type="submit">Join waitlist</button>
+        </form>
+        <p class="ok" data-ok>You're on the list — check your inbox to confirm. 🎉</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <a class="brand" href="#top"><span class="mark"></span> Nova</a>
+      <p>© <span data-year></span> Nova. Built for people who ship.</p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
