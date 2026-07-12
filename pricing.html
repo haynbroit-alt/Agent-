@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarifs — Aurora</title>
+  <meta name="description" content="Des tarifs simples et transparents. Achat unique, licence à vie, mises à jour incluses." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236d5efc'/%3E%3Cstop offset='.55' stop-color='%2346c2ff'/%3E%3Cstop offset='1' stop-color='%23ff6ac1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span> Aurora</a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="index.html#features">Fonctionnalités</a>
+        <a href="pricing.html" aria-current="page">Tarifs</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">À propos</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" data-theme-toggle aria-label="Changer de thème">
+          <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <a class="btn btn-primary" href="#plans">Commencer</a>
+        <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <div class="container">
+        <span class="eyebrow">Tarifs</span>
+        <h1>Simple, transparent, sans surprise</h1>
+        <p>Choisissez le plan qui vous convient. Changez d'avis quand vous voulez.</p>
+      </div>
+    </div>
+
+    <section id="plans" style="padding-top: 20px;">
+      <div class="container">
+        <div class="toggle-billing">
+          <span>Mensuel</span>
+          <label class="switch"><input type="checkbox" data-billing-toggle aria-label="Basculer la facturation annuelle" /><span class="track"></span></label>
+          <span>Annuel <span class="save-pill">-20%</span></span>
+        </div>
+
+        <div class="price-grid">
+          <!-- Starter -->
+          <div class="plan reveal">
+            <h3>Starter</h3>
+            <div class="amount" data-price-monthly="0€" data-price-yearly="0€">0€<span>/mois</span></div>
+            <p class="desc">Pour tester et lancer un premier projet.</p>
+            <ul>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 1 projet</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Toutes les pages</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Mode clair / sombre</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Support communautaire</li>
+            </ul>
+            <a class="btn btn-ghost" href="contact.html">Commencer</a>
+          </div>
+
+          <!-- Pro (featured) -->
+          <div class="plan featured reveal">
+            <h3>Pro</h3>
+            <div class="amount" data-price-monthly="19€" data-price-yearly="15€">19€<span>/mois</span></div>
+            <p class="desc">Pour les créateurs et petites équipes.</p>
+            <ul>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Projets illimités</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Licence commerciale</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Mises à jour à vie</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Support prioritaire</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Composants bonus</li>
+            </ul>
+            <a class="btn btn-primary" href="contact.html">Choisir Pro</a>
+          </div>
+
+          <!-- Team -->
+          <div class="plan reveal">
+            <h3>Team</h3>
+            <div class="amount" data-price-monthly="49€" data-price-yearly="39€">49€<span>/mois</span></div>
+            <p class="desc">Pour les agences et grandes équipes.</p>
+            <ul>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Tout le plan Pro</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Jusqu'à 10 utilisateurs</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Revente pour clients</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Onboarding dédié</li>
+            </ul>
+            <a class="btn btn-ghost" href="contact.html">Contacter les ventes</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-soft">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions sur les tarifs</h2>
+        </div>
+        <div class="faq reveal">
+          <details open><summary>Puis-je changer de plan plus tard ?</summary><p>Oui, vous pouvez monter ou descendre de plan à tout moment. La différence est calculée au prorata.</p></details>
+          <details><summary>Proposez-vous des remboursements ?</summary><p>Oui, satisfait ou remboursé sous 14 jours, sans justification.</p></details>
+          <details><summary>Quels moyens de paiement acceptez-vous ?</summary><p>Cartes bancaires principales et PayPal via un prestataire de paiement sécurisé.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span> Aurora</a>
+          <p>Le kit de landing page premium pour lancer des produits qui convertissent.</p>
+        </div>
+        <div><h4>Produit</h4><ul><li><a href="index.html#features">Fonctionnalités</a></li><li><a href="pricing.html">Tarifs</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+        <div><h4>Entreprise</h4><ul><li><a href="about.html">À propos</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><h4>Légal</h4><ul><li><a href="#">Confidentialité</a></li><li><a href="#">Conditions</a></li><li><a href="#">Licence</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> Aurora. Tous droits réservés.</span>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.2h3.6l-7.9 9 9.3 12.3h-7.3l-5.7-7.5-6.5 7.5H.7l8.4-9.6L0 1.2h7.5l5.2 6.9zM17.6 20.3h2L6.5 3.2H4.4z"/></svg></a>
+          <a href="#" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7 0-.7 0-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
