@@ -1,0 +1,47 @@
+name: Gumroad — publish products
+
+# Déclenché À LA MAIN depuis l'onglet Actions de GitHub (bouton "Run workflow").
+# Utilise le secret GUMROAD_ACCESS_TOKEN (Settings → Secrets and variables → Actions).
+# Aucun token n'est écrit dans le dépôt ; il n'existe que le temps du run.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Que faire ?"
+        required: true
+        default: "verify"
+        type: choice
+        options:
+          - verify      # lecture seule : vérifie que le token marche
+          - dry-run     # montre les 6 produits qui seraient créés (aucune écriture)
+          - publish     # crée réellement les 6 produits individuels (pas le bundle)
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run gumroad-publish
+        env:
+          GUMROAD_ACCESS_TOKEN: ${{ secrets.GUMROAD_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$GUMROAD_ACCESS_TOKEN" ]; then
+            echo "::error::Secret GUMROAD_ACCESS_TOKEN manquant. Ajoute-le dans Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          case "${{ inputs.action }}" in
+            verify)
+              node tools/gumroad-publish.js verify ;;
+            dry-run)
+              node tools/gumroad-publish.js create --manifest products.extra.json ;;
+            publish)
+              node tools/gumroad-publish.js create --manifest products.extra.json --publish ;;
+            *)
+              echo "Action inconnue"; exit 1 ;;
+          esac
