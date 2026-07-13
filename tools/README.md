@@ -48,6 +48,24 @@ node tools/gumroad-publish.js create --publish
 - Si l'API refuse la création de produits sur ton compte/plan, le script affiche l'erreur
   et tu peux basculer sur la création manuelle (textes dans `../launch/gumroad-listings.md`).
 
+## Sans terminal : via GitHub Actions (depuis un téléphone)
+
+Un workflow permet de lancer le script **depuis l'app GitHub**, sans ligne de commande :
+
+1. Mets ton token **régénéré** dans le dépôt : **Settings → Secrets and variables →
+   Actions → New repository secret**, nom `GUMROAD_ACCESS_TOKEN`.
+2. Va dans l'onglet **Actions → « Gumroad — publish products » → Run workflow**.
+3. Choisis l'action :
+   - **verify** (lecture seule) pour tester le token,
+   - **dry-run** pour voir les 6 produits qui seraient créés,
+   - **publish** pour créer réellement les **6 produits individuels** (le bundle est exclu
+     car déjà en vente — évite les doublons).
+
+Le token n'existe que le temps du run et n'est jamais écrit dans le dépôt.
+
+> ⚠️ Après `publish`, les produits sont créés en **brouillon** : il te reste à uploader le
+> `.zip` de chaque template + un visuel, puis à cliquer **Publish** sur Gumroad.
+
 ## Personnaliser les produits
 
 Édite `products.json` : noms, `price_cents` (en **centimes**), descriptions. Le manifeste

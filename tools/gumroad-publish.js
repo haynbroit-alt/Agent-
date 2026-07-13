@@ -14,6 +14,7 @@
  *   node tools/gumroad-publish.js list        # liste tes produits existants
  *   node tools/gumroad-publish.js create      # DRY-RUN : montre ce qui serait créé
  *   node tools/gumroad-publish.js create --publish   # crée réellement les produits
+ *   node tools/gumroad-publish.js create --manifest products.extra.json   # autre manifeste
  *
  * Node 18+ requis (utilise fetch global). Aucune dépendance.
  */
@@ -89,9 +90,15 @@ async function list() {
   }
 }
 
+function argValue(flag) {
+  const i = process.argv.indexOf(flag);
+  return i !== -1 && process.argv[i + 1] ? process.argv[i + 1] : null;
+}
+
 function loadManifest() {
-  const file = path.join(__dirname, "products.json");
-  if (!fs.existsSync(file)) die("tools/products.json introuvable.");
+  const rel = argValue("--manifest") || "products.json";
+  const file = path.isAbsolute(rel) ? rel : path.join(__dirname, rel);
+  if (!fs.existsSync(file)) die(`Manifeste introuvable : ${file}`);
   const data = JSON.parse(fs.readFileSync(file, "utf8"));
   if (!Array.isArray(data.products) || !data.products.length) die("products.json ne contient aucun produit.");
   return data;

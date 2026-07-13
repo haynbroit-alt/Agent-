@@ -1,0 +1,36 @@
+{
+  "_comment": "Les 6 produits INDIVIDUELS (le bundle est exclu car déjà en vente). Prix en CENTIMES (EUR).",
+  "currency": "eur",
+  "products": [
+    {
+      "name": "Aurora — Premium Landing Page Kit",
+      "price_cents": 2900,
+      "description": "Kit de landing page premium : 6 pages, mode clair/sombre, 100% responsive, zéro dépendance. HTML/CSS/JS pur, prêt à déployer."
+    },
+    {
+      "name": "Nova — AI Startup Landing Template",
+      "price_cents": 3400,
+      "description": "Landing pensée pour les produits IA : hero sombre avec glow, démo terminal animée, section waitlist, tarifs et FAQ. 100% statique."
+    },
+    {
+      "name": "Mentor — Coaching & Creator Landing Template",
+      "price_cents": 3400,
+      "description": "Landing pour coachs et créateurs : offres/programmes, preuve sociale, témoignages et formulaire de réservation. Chaleureux et pro."
+    },
+    {
+      "name": "Onelink — Self-hosted Link-in-Bio Page",
+      "price_cents": 1200,
+      "description": "Ta page 'tous mes liens', auto-hébergée, sans abonnement. Mobile-first, dégradé personnalisable, liens + réseaux + capture email."
+    },
+    {
+      "name": "Estate — Real Estate Agent & Agency Landing",
+      "price_cents": 3400,
+      "description": "Site clé en main pour agents et agences : recherche de biens, grille de listings, bio agent et formulaire de valuation gratuite."
+    },
+    {
+      "name": "Bistro — Restaurant & Local Business Landing",
+      "price_cents": 3400,
+      "description": "Landing appétissante pour restaurants et commerces locaux : menu, galerie, horaires et formulaire de réservation. Mobile-first."
+    }
+  ]
+}
