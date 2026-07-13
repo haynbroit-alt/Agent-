@@ -9,6 +9,8 @@ vendre séparément ou en bundle. Voir `../MARKET-RESEARCH.md` pour le pourquoi 
 | `nova-ai/` | **Nova** | Startup / outil IA | Sombre, glow, waitlist, démo terminal |
 | `mentor-coach/` | **Mentor** | Coach / créateur | Chaleureux, offres, témoignages, réservation |
 | `onelink-bio/` | **Onelink** | Créateurs (link-in-bio) | Mobile-first, une page, liens + réseaux |
+| `estate-realty/` | **Estate** | Agent / agence immobilière | Navy + or, recherche, listings, valuation |
+| `bistro-restaurant/` | **Bistro** | Restaurant / commerce local | Chaleureux, menu, horaires, réservation |
 
 ## Démarrer
 
