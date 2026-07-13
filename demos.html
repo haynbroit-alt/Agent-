@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live demos — The Complete Landing Kit</title>
+  <meta name="description" content="Try all 6 premium landing page templates live. Pure HTML/CSS/JS, dark mode, zero dependencies." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236d5efc'/%3E%3Cstop offset='.55' stop-color='%2346c2ff'/%3E%3Cstop offset='1' stop-color='%23ff6ac1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <style>
+    :root{--grad:linear-gradient(120deg,#8a7bff,#46c2ff 55%,#ff6ac1)}
+    *{box-sizing:border-box;margin:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:#0b0d16;color:#eef0f6;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    .glow{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none}
+    .g1{width:560px;height:560px;top:-200px;left:-140px;background:radial-gradient(circle,#6d5efc,transparent 70%);opacity:.5}
+    .g2{width:520px;height:520px;bottom:-220px;right:-160px;background:radial-gradient(circle,#46c2ff,transparent 70%);opacity:.35}
+    .wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:clamp(40px,7vw,90px) clamp(20px,4vw,40px)}
+    header{text-align:center;margin-bottom:clamp(40px,6vw,64px)}
+    .badge{display:inline-flex;gap:9px;align-items:center;padding:7px 16px;border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;font-size:14px;color:#c8ccdd;background:rgba(255,255,255,.04);margin-bottom:22px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#00e0c6}
+    h1{font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:800;letter-spacing:-.02em;line-height:1.08}
+    .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+    header p{margin-top:16px;font-size:clamp(1.05rem,2vw,1.25rem);color:#a3a7b8;max-width:52ch;margin-inline:auto}
+    .btns{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 26px;border-radius:999px;
+      font-weight:600;font-size:1rem;border:1px solid transparent;cursor:pointer}
+    .btn-primary{background:var(--grad);color:#0a0a12}
+    .btn-ghost{border-color:rgba(255,255,255,.2);color:#eef0f6}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .card{display:flex;flex-direction:column;background:#12141d;border:1px solid #23252f;border-radius:16px;
+      overflow:hidden;transition:transform .2s,border-color .2s}
+    .card:hover{transform:translateY(-4px);border-color:#46c2ff}
+    .thumb{aspect-ratio:16/10;position:relative;display:grid;place-items:center;font-weight:800;font-size:1.5rem;color:#fff}
+    .t1{background:linear-gradient(135deg,#6d5efc,#46c2ff)}
+    .t2{background:linear-gradient(135deg,#0b0d16,#00e0c6)}
+    .t3{background:linear-gradient(135deg,#e8613c,#f0a24b)}
+    .t4{background:linear-gradient(135deg,#ff6ec4,#7873f5)}
+    .t5{background:linear-gradient(135deg,#0f2a43,#c8a45c)}
+    .t6{background:linear-gradient(135deg,#2b1a12,#c9722e)}
+    .body{padding:18px 20px;display:flex;flex-direction:column;gap:4px;flex:1}
+    .body .tag{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#46c2ff}
+    .body h3{font-size:1.15rem}
+    .body p{font-size:.9rem;color:#a3a7b8;margin:0 0 14px}
+    .body .open{margin-top:auto;font-weight:600;color:#eef0f6;display:inline-flex;align-items:center;gap:6px}
+    .card:hover .open{color:#46c2ff}
+    footer{text-align:center;margin-top:clamp(48px,7vw,72px);color:#8b90a6;font-size:.9rem}
+    footer a{color:#46c2ff}
+    @media(max-width:820px){.grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="glow g1"></div><div class="glow g2"></div>
+  <div class="wrap">
+    <header>
+      <span class="badge"><span class="dot"></span> 6 live demos · click any card</span>
+      <h1>The Complete <span class="grad">Landing Kit</span></h1>
+      <p>Six conversion-ready website templates. Pure HTML/CSS/JS — no framework, no build step, dark mode included. Try them all below.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="https://haynbroit.gumroad.com/l/aoaxcn" target="_blank" rel="noopener">Get the bundle</a>
+        <a class="btn btn-ghost" href="#demos">See the demos</a>
+      </div>
+    </header>
+
+    <div class="grid" id="demos">
+      <a class="card" href="index.html">
+        <div class="thumb t1">Aurora</div>
+        <div class="body"><span class="tag">SaaS / Startup</span><h3>Aurora</h3><p>6-page landing kit with light & dark mode.</p><span class="open">Open demo →</span></div>
+      </a>
+      <a class="card" href="templates/nova-ai/index.html">
+        <div class="thumb t2">Nova</div>
+        <div class="body"><span class="tag">AI Startup</span><h3>Nova</h3><p>Dark, glowing, with a waitlist and terminal demo.</p><span class="open">Open demo →</span></div>
+      </a>
+      <a class="card" href="templates/mentor-coach/index.html">
+        <div class="thumb t3">Mentor</div>
+        <div class="body"><span class="tag">Coach / Creator</span><h3>Mentor</h3><p>Offers, social proof and a booking form.</p><span class="open">Open demo →</span></div>
+      </a>
+      <a class="card" href="templates/onelink-bio/index.html">
+        <div class="thumb t4">Onelink</div>
+        <div class="body"><span class="tag">Link-in-bio</span><h3>Onelink</h3><p>Mobile-first, self-hosted Linktree alternative.</p><span class="open">Open demo →</span></div>
+      </a>
+      <a class="card" href="templates/estate-realty/index.html">
+        <div class="thumb t5">Estate</div>
+        <div class="body"><span class="tag">Real Estate</span><h3>Estate</h3><p>Property search, listings and valuation lead form.</p><span class="open">Open demo →</span></div>
+      </a>
+      <a class="card" href="templates/bistro-restaurant/index.html">
+        <div class="thumb t6">Bistro</div>
+        <div class="body"><span class="tag">Restaurant / Local</span><h3>Bistro</h3><p>Menu, gallery, hours and a reservation form.</p><span class="open">Open demo →</span></div>
+      </a>
+    </div>
+
+    <footer>
+      Like what you see? <a href="https://haynbroit.gumroad.com/l/aoaxcn" target="_blank" rel="noopener">Get all 6 templates →</a><br>
+      Pure HTML/CSS/JS · Dark mode · Responsive · Zero dependencies
+    </footer>
+  </div>
+</body>
+</html>
