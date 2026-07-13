@@ -47,7 +47,7 @@ vendable séparément ET en bundle. Trois nouveaux produits, choisis pour croise
 | Produit | Prix conseillé | Cible de ventes vers 5 000 € net |
 |---------|----------------|----------------------------------|
 | Template de niche seul | 24–39 € | — |
-| **Bundle des 4 (Aurora + 3)** | 49–69 € | ~90–110 ventes |
+| **Bundle des 6 (Aurora + 5)** | 69–89 € | ~70–90 ventes |
 | Link-in-bio seul | 9–15 € | volume élevé, produit d'appel |
 
 Le **bundle** est le levier : panier moyen plus élevé, moins de ventes nécessaires. Le
