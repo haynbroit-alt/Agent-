@@ -8,9 +8,9 @@ Coche au fur et à mesure. Objectif : **en vente en 1 journée**, puis diffusion
 - [ ] Créer un compte **Gumroad** (ou Lemon Squeezy). C'est eux qui encaissent.
 - [ ] Pour chaque produit : zipper son dossier (sans `.git`).
   - Aurora = racine du repo · Nova/Mentor/Onelink = leur dossier dans `templates/`
-- [ ] Créer les 5 produits avec les textes de `gumroad-listings.md` (4 templates + bundle).
+- [ ] Créer les 7 produits avec les textes de `gumroad-listings.md` (6 templates + bundle).
 - [ ] Faire 3–5 captures propres par produit (clair + sombre + mobile). **C'est ce qui vend.**
-- [ ] Fixer les prix : Onelink 12 € · les 3 landings 29–34 € · bundle 59 €.
+- [ ] Fixer les prix : Onelink 12 € · les 5 landings 29–34 € · bundle 79 €.
 - [ ] Activer la garantie 14 jours dans les réglages Gumroad.
 - [ ] Tester un achat test (mode preview) pour vérifier le fichier livré.
 

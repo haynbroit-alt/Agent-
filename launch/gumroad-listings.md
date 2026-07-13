@@ -105,25 +105,77 @@ Marre de payer un abonnement pour une page de liens ? Onelink est ta propre page
 
 ---
 
-## 🎁 Produit 5 — LE BUNDLE (le levier de revenu)
+## 🔵 Produit 5 — Estate (landing immobilière)
 
-**Titre :** The Complete Landing Kit — 4 Premium Templates (Aurora + Nova + Mentor + Onelink)
+**Titre :** Estate — Real Estate Agent & Agency Landing Template
 
-**Prix conseillé :** 59 € (au lieu de 109 € séparément — affiche l'économie)
+**Prix conseillé :** 34 €
 
 **Résumé :**
-> Les 4 templates premium en un seul pack. SaaS, IA, coaching et link-in-bio. Tout ce qu'il faut pour lancer n'importe quel projet, à moitié prix.
+> Le site clé en main pour agents et agences immobilières : recherche de biens, grille de listings, présentation de l'agent et formulaire de valuation gratuite. Élégant et rassurant.
 
 **Description :**
-Pourquoi choisir ? Le bundle réunit **4 templates premium** couvrant les niches les plus demandées. Un seul achat, licence à vie, mises à jour incluses.
+Agent ou agence ? Estate inspire confiance et capte des leads : palette navy + or haut de gamme, listings mis en valeur, et un appel à l'action clair vers l'estimation gratuite.
+
+**Ce que tu obtiens :**
+- 🔎 Barre de recherche (ville, type, budget)
+- 🏡 Grille de biens avec prix, badges et caractéristiques
+- 👤 Section « votre agent » + preuve sociale
+- 📩 Formulaire de valuation gratuite prêt à brancher
+- ⚡ 100 % statique, responsive, sans dépendance
+
+**Pour qui :** agents immobiliers, agences, chasseurs immobiliers.
+
+**Garantie :** satisfait ou remboursé 14 jours.
+
+---
+
+## 🟤 Produit 6 — Bistro (landing restaurant / commerce local)
+
+**Titre :** Bistro — Restaurant & Local Business Landing Template
+
+**Prix conseillé :** 34 €
+
+**Résumé :**
+> Le site appétissant pour restaurants et commerces de quartier : menu, galerie, horaires et réservation en ligne. Chaleureux, mobile-first, prêt à remplir la salle.
+
+**Description :**
+Restaurant, café ou commerce local ? Bistro donne envie et convertit : ambiance chaleureuse, menu lisible, horaires clairs et un formulaire de réservation direct.
+
+**Ce que tu obtiens :**
+- 🍽️ Menu structuré (entrées, plats, desserts, boissons)
+- 🖼️ Galerie de la salle / des plats
+- 🕒 Horaires + localisation
+- 📅 Formulaire de réservation prêt à brancher
+- ⚡ 100 % statique, responsive, sans dépendance
+
+**Pour qui :** restaurants, cafés, bars, commerces de proximité.
+
+**Garantie :** satisfait ou remboursé 14 jours.
+
+---
+
+## 🎁 Produit 7 — LE BUNDLE (le levier de revenu)
+
+**Titre :** The Complete Landing Kit — 6 Premium Templates (Aurora + Nova + Mentor + Onelink + Estate + Bistro)
+
+**Prix conseillé :** 79 € (au lieu de 177 € séparément — affiche l'économie)
+
+**Résumé :**
+> Les 6 templates premium en un seul pack. SaaS, IA, coaching, link-in-bio, immobilier et restaurant. De quoi lancer (ou vendre à un client) n'importe quel projet, pour bien moins cher.
+
+**Description :**
+Pourquoi choisir ? Le bundle réunit **6 templates premium** couvrant les niches les plus demandées. Un seul achat, licence commerciale, mises à jour incluses. Idéal aussi pour les freelances et agences qui livrent des sites clients.
 
 **Inclus :**
 - 🟣 **Aurora** — landing SaaS/startup (6 pages)
 - 🟢 **Nova** — landing produit IA (dark, waitlist)
 - 🟠 **Mentor** — landing coach/créateur
 - 💗 **Onelink** — page link-in-bio
+- 🔵 **Estate** — landing immobilière
+- 🟤 **Bistro** — landing restaurant/local
 - 📄 Guides + licence commerciale
 
-**Économie : 50 €** vs achat séparé. **Garantie 14 jours.**
+**Économie : ~98 €** vs achat séparé. **Garantie 14 jours.**
 
-> 💡 Astuce prix : mets Onelink en produit d'appel (12 €) et pousse le bundle en upsell.
+> 💡 Astuce prix : mets Onelink en produit d'appel (12 €) et pousse le bundle à 79 € en upsell.

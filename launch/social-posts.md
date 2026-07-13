@@ -66,7 +66,7 @@ publications et réponds aux commentaires.
 
 **Tweet 4 (CTA) :**
 > Launch pricing this week 👇
-> Grab the full bundle (4 templates) for less than the price of two: [LIEN]
+> Grab the full bundle (6 templates) for less than the price of two: [LIEN]
 > RTs genuinely help a solo maker 🙏
 
 ---
@@ -90,6 +90,34 @@ publications et réponds aux commentaires.
 **Hook (0-2s) :** "Stop paying monthly for a link-in-bio."
 **Milieu (2-10s) :** montre Onelink à l'écran, scroll les liens. "This is yours. One file. Any colors."
 **Fin (10-15s) :** "One-time price, host it free. Link in bio 😉"
+
+---
+
+## 🏡 Estate (immobilier) — canaux locaux & B2B
+
+**LinkedIn / groupes d'agents immobiliers :**
+> Most agents I know are stuck with a clunky agency website or none at all.
+> I built a clean, self-hosted landing template made for one thing: turning visitors into
+> valuation requests. Property search, listings grid, your bio, a lead form. You own the files.
+> One-time price, no subscription. Link in comments — feedback from agents welcome.
+
+**Cold DM à un agent / une agence :**
+> Hi [prénom], I make landing pages for real estate agents — property search, listings,
+> and a "free valuation" lead form built in. One-time price, you host it yourself.
+> Want me to send the demo link?
+
+---
+
+## 🍽️ Bistro (restaurant / local) — canaux locaux
+
+**Instagram / Facebook (page resto ou pitch à un restaurateur) :**
+> Your food is great — your website shouldn't hold you back.
+> Bistro is a warm, mobile-first template for restaurants: menu, photos, hours, and a
+> reservation form. No monthly fee, you own it. Demo 👇
+
+**Cold DM à un restaurant local :**
+> Hi! I build simple, good-looking websites for restaurants — menu, hours, photos and an
+> online reservation form. One-time price, no subscription. Happy to send a demo if useful.
 
 ---
 
