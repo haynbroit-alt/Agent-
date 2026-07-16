@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://haynbroit-alt.github.io/Agent-/sitemap.xml
